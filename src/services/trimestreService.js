@@ -1,32 +1,27 @@
-const TrimestreRepository = require("../repositories/trimestreRepository");
+const trimestreRepository = require("../repositories/trimestreRepository");
 
-const trimestreService = {
-
-  async getAllTrimestres() {
-    return TrimestreRepository.findAll();
-  },
-
-  async getTrimestreById(id) {
-    return TrimestreRepository.findById(id);
-  },
-
-  async createTrimestre(data) {
-    if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
-      throw new Error('La date de début doit être avant la date de fin');
-    }
-    return TrimestreRepository.create(data);
-  },
-
-  async updateTrimestre(id, data) {
-    if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
-      throw new Error('La date de début doit être avant la date de fin');
-    }
-    return TrimestreRepository.update(id, data);
-  },
-
-  async deleteTrimestre(id) {
-    return TrimestreRepository.delete(id);
-  },
+exports.getAllTrimestres = () => {
+  return trimestreRepository.findAll();
 };
 
-module.exports = trimestreService;
+exports.getTrimestreById = (id) => {
+  return trimestreRepository.findById(id);
+};
+
+exports.createTrimestre = (data) => {
+  if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
+    throw new Error('La date de début doit être avant la date de fin');
+  }
+  return trimestreRepository.create(data);
+};
+
+exports.updateTrimestre = (id, data) => {
+  if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
+    throw new Error('La date de début doit être avant la date de fin');
+  }
+  return trimestreRepository.update(id, data);
+};
+
+exports.deleteTrimestre = (id) => {
+  return trimestreRepository.delete(id);
+};

@@ -3,6 +3,8 @@ const classeRoutes = require("./routes/classeRoutes.js");
 const matiereRoutes = require("./routes/matiereRoutes.js");
 const eleveRoutes = require("./routes/eleveRoutes.js");
 const professeurRoutes = require("./routes/professeurRoutes.js");
+const notesRoutes = require("./routes/notesRoutes.js");
+const trimestreRoutes = require("./routes/trimestreRoutes.js");
 
 const app = express();
 const PORT = 3000;
@@ -15,6 +17,8 @@ app.use("/classes", classeRoutes);
 app.use("/matieres", matiereRoutes);
 app.use("/eleves", eleveRoutes);
 app.use("/professeurs", professeurRoutes);
+app.use("/notes", notesRoutes);
+app.use("/trimestres", trimestreRoutes);
 
 // Route par défaut
 app.get("/", (req, res) => res.send("API Digischool OK"));

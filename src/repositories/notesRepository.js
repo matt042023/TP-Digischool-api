@@ -1,36 +1,49 @@
-const Notes = require('../models/Notes');
+const notesRepository = require('../models/Notes');
 
-class NotesRepository {
-  async findAll() {
-    return Notes.find()
-      .populate('ideleve')
-      .populate('idclasse')
-      .populate('idmatiere')
-      .populate('idprof')
-      .populate('idtrimestre');
-  }
+let nextNoteId = notesRepository.length ? Math.max(...notesRepository.map((e) => e.idnotes)) + 1 : 1;
 
-  async findById(id) {
-    return Notes.findById(id)
-      .populate('ideleve')
-      .populate('idclasse')
-      .populate('idmatiere')
-      .populate('idprof')
-      .populate('idtrimestre');
-  }
-
-  async create(data) {
-    const note = new Notes(data);
-    return note.save();
-  }
-
-  async update(id, data) {
-    return Notes.findByIdAndUpdate(id, data, { new: true });
-  }
-
-  async delete(id) {
-    return Notes.findByIdAndDelete(id);
-  }
+exports.findAll = () => {
+  return notesRepository;
 }
 
-module.exports = new NotesRepository();
+exports.findById = (id) => {
+  return notesRepository.find((e) => e.idnotes === Number(id)) || null;
+}
+
+exports.create = (data) => {
+  const note = {
+    idnotes: nextNoteId++,
+    date_saisie: data.date_saisie || null,
+    ideleve: data.ideleve || null,
+    idclasse: data.idclasse || null,
+    idmatiere: data.idmatiere || null,
+    idprof: data.idprof || null,
+    idtrimestre: data.idtrimestre || null,
+    note: data.note || null,
+    avis: data.avis || "",
+    avancement: data.avancement || 0,
+  };
+  notesRepository.push(note);
+}
+
+exports.update = (id, data) => {
+  const index = notesRepository.findIndex((e) => e.idnotes === Number(id));
+  if (index === -1) return null;
+
+  notesRepository[index] = {
+    ...notesRepository[index],
+    ...data,
+    idnotes: notesRepository[index].idnotes,
+  };
+
+  return notesRepository[index];
+};
+
+exports.remove = (id) => {
+  const index = notesRepository.findIndex((e) => e.idnotes === Number(id));
+  if (index === -1) return null;
+
+  const deleted = notesRepository[index];
+  notesRepository.splice(index, 1);
+  return deleted;
+};

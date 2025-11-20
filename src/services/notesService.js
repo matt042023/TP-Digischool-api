@@ -1,28 +1,24 @@
-const NotesRepository = require('../repositories/NotesRepository');
+const notesRepository = require('../repositories/notesRepository');
 
-const NotesService = {
-  async getAllNotes() {
-    return NotesRepository.findAll();
-  },
+exports.getAllNotes = () => {
+  return notesRepository.findAll();
+};
 
-  async getNoteById(id) {
-    return NotesRepository.findById(id);
-  },
+exports.getNoteById = (id) => {
+  return notesRepository.findById(id);
+};
 
-  async createNote(data) {
-    return NotesRepository.create(data);
-  },
+exports.createNote = (data) => {
+  return notesRepository.create(data);
+};
 
-  async updateNote(id, data) {
-    if (data.note && (data.note < 0 || data.note > 20)) {
-      throw new Error('La note doit être comprise entre 0 et 20');
-    }
-    return NotesRepository.update(id, data);
-  },
+exports.updateNote = (id, data) => {
+  if (data.note && (data.note < 0 || data.note > 20)) {
+    throw new Error('La note doit être comprise entre 0 et 20');
+  }
+  return notesRepository.update(id, data);
+};
 
-  async deleteNote(id) {
-    return NotesRepository.delete(id);
-  },
-}
-
-module.exports = new NotesService();
+exports.deleteNote = (id) => {
+  return notesRepository.delete(id);
+};
