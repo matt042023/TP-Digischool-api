@@ -1,17 +1,21 @@
 const express = require("express");
-const app = express();
+const classeRoutes = require("./routes/classeRoutes.js");
+const matiereRoutes = require("./routes/matiereRoutes.js");
 
+const app = express();
+const PORT = 3000;
+
+// Middleware pour parser le JSON
 app.use(express.json());
 
-// Routes principales
-app.use("/api/eleves", require("./routes/eleveRoutes"));
-app.use("/api/professeurs", require("./routes/professeurRoutes"));
+// Routes
+app.use("/classes", classeRoutes);
+app.use("/matieres", matiereRoutes);
 
-app.get("/", (req, res) => {
-  res.send("API Digischool (local data) 🚀");
-});
+// Route par défaut
+app.get("/", (req, res) => res.send("API Digischool OK"));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Serveur démarré sur http://localhost:${PORT}`);
-});
+// Lancement du serveur
+app.listen(PORT, () =>
+  console.log(`Serveur démarré sur http://localhost:${PORT}`)
+);
