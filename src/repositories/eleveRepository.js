@@ -1,4 +1,4 @@
-const { eleves } = require("../utils/data");
+const eleves = require("../models/Eleve");
 
 let nextEleveId = eleves.length ? Math.max(...eleves.map((e) => e.id)) + 1 : 1;
 

@@ -1,4 +1,4 @@
-const { professeurs } = require("../utils/data");
+const professeurs = require("../models/Professeur");
 
 let nextProfId = professeurs.length
   ? Math.max(...professeurs.map((p) => p.id)) + 1
