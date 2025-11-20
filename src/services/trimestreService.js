@@ -1,28 +1,32 @@
-const Trimestre = require("../models/Trimestre");
+const TrimestreRepository = require("../repositories/trimestreRepository");
 
 const trimestreService = {
 
-  createTrimestre: async (data) => {
-    const trimestre = new Trimestre(data);
-    return await trimestre.save();
+  async getAllTrimestres() {
+    return TrimestreRepository.findAll();
   },
 
-  getAllTrimestres: async () => {
-    return await Trimestre.find().exec();
+  async getTrimestreById(id) {
+    return TrimestreRepository.findById(id);
   },
 
-  getTrimestreById: async (id) => {
-    return await Trimestre.findById(id).exec();
+  async createTrimestre(data) {
+    if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
+      throw new Error('La date de début doit être avant la date de fin');
+    }
+    return TrimestreRepository.create(data);
   },
 
-  updateTrimestre: async (id, data) => {
-    return await Trimestre.findByIdAndUpdate(id, data, { new: true });
+  async updateTrimestre(id, data) {
+    if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
+      throw new Error('La date de début doit être avant la date de fin');
+    }
+    return TrimestreRepository.update(id, data);
   },
 
-  deleteTrimestre: async (id) => {
-    return await Trimestre.findByIdAndDelete(id);
-  }
-
+  async deleteTrimestre(id) {
+    return TrimestreRepository.delete(id);
+  },
 };
 
 module.exports = trimestreService;

@@ -1,41 +1,28 @@
-const Notes = require("../models/Notes");
+const NotesRepository = require('../repositories/NotesRepository');
 
-const notesService = {
-
-  createNote: async (data) => {
-    const note = new Notes(data);
-    return await note.save();
+const NotesService = {
+  async getAllNotes() {
+    return NotesRepository.findAll();
   },
 
-  getAllNotes: async () => {
-    return await Notes.find()
-      .populate("ideleve")
-      .populate("idclasse")
-      .populate("idmatiere")
-      .exec();
+  async getNoteById(id) {
+    return NotesRepository.findById(id);
   },
 
-  getNotesByEleve: async (eleveId) => {
-    return await Notes.find({ ideleve: eleveId })
-      .populate("idclasse")
-      .populate("idmatiere")
-      .exec();
+  async createNote(data) {
+    return NotesRepository.create(data);
   },
 
-  getNotesByClasseAndMatiere: async (classeId, matiereId) => {
-    return await Notes.find({ idclasse: classeId, idmatiere: matiereId })
-      .populate("ideleve")
-      .exec();
+  async updateNote(id, data) {
+    if (data.note && (data.note < 0 || data.note > 20)) {
+      throw new Error('La note doit être comprise entre 0 et 20');
+    }
+    return NotesRepository.update(id, data);
   },
 
-  updateNote: async (noteId, data) => {
-    return await Notes.findByIdAndUpdate(noteId, data, { new: true });
+  async deleteNote(id) {
+    return NotesRepository.delete(id);
   },
+}
 
-  deleteNote: async (noteId) => {
-    return await Notes.findByIdAndDelete(noteId);
-  }
-
-};
-
-module.exports = notesService;
+module.exports = new NotesService();
