@@ -1,16 +1,19 @@
-const mongoose = require("mongoose");
-
-const TrimestreSchema = new mongoose.Schema({
-  nom: {
-    type: String,
-    required: true
+let trimestres = [
+  {
+    "idtrimestre": 1,
+    "nom": "TRIM01",
+    "date": "2023-12-01T09:08:03.000Z"
   },
-  date: {
-    type: Date,
-    required: true
+  {
+    "idtrimestre": 2,
+    "nom": "TRIM02",
+    "date": "2024-03-08T09:08:25.000Z"
+  },
+  {
+    "idtrimestre": 3,
+    "nom": "TRIM03",
+    "date": "2024-06-21T08:08:40.000Z"
   }
-}, {
-  timestamps: true
-});
+]
 
-module.exports = mongoose.model("Trimestre", TrimestreSchema);
+module.exports = trimestres;

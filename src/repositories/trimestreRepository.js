@@ -1,26 +1,43 @@
-const Trimestre = require('../models/Trimestre');
+const trimestreRepository = require('../models/Trimestre');
 
-class TrimestreRepository {
-  async findAll() {
-    return Trimestre.find();
-  }
+let nextTrimestreId = trimestreRepository.length ? Math.max(...trimestreRepository.map((e) => e.idtrimestre)) + 1 : 1;
 
-  async findById(id) {
-    return Trimestre.findById(id);
-  }
+exports.findAll = () => {
+  return trimestreRepository;
+};
 
-  async create(data) {
-    const trimestre = new Trimestre(data);
-    return trimestre.save();
-  }
+exports.findById = (id) => {
+  return trimestreRepository.find((e) => e.idtrimestre === Number(id)) || null;
+};
 
-  async update(id, data) {
-    return Trimestre.findByIdAndUpdate(id, data, { new: true });
-  }
+exports.create = (data) => {
+  const newTrimestre = {
+    idtrimestre: nextTrimestreId++,
+    nom: data.nom,
+    date: data.date,
+  };
+  trimestreRepository.push(newTrimestre);
+  return newTrimestre;
+};
 
-  async delete(id) {
-    return Trimestre.findByIdAndDelete(id);
-  }
-}
+exports.update = (id, data) => {
+  const index = trimestreRepository.findIndex((e) => e.idtrimestre === Number(id));
+  if (index === -1) return null;
 
-module.exports = new TrimestreRepository();
+  trimestreRepository[index] = {
+    ...trimestreRepository[index],
+    ...data,
+    idtrimestre: trimestreRepository[index].idtrimestre,
+  };
+
+  return trimestreRepository[index];
+};
+
+exports.delete = (id) => {
+  const index = trimestreRepository.findIndex((e) => e.idtrimestre === Number(id));
+  if (index === -1) return null;
+
+  const deleted = trimestreRepository[index];
+  trimestreRepository.splice(index, 1);
+  return deleted;
+};
