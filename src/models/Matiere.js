@@ -1,9 +1,12 @@
-let matieres = [
-  { id: 1, nom: "LECTURE-CP" },
-  { id: 2, nom: "LECTURE-CE1" },
-  { id: 3, nom: "SCIENCES & DECOUVERTES" },
-  { id: 4, nom: "MATHEMATIQUES" },
-  { id: 5, nom: "EVEIL SPORTIF" }
-];
+const mongoose = require("mongoose");
 
-module.exports = matieres;
+//schéma de la classe
+const matiereSchema = new mongoose.Schema({
+    nom: { type: String, required: true} //nom de la matière, obligatoire
+});
+
+// Création du modèle
+const Matiere = mongoose.model("Matiere", matiereSchema);
+
+// Export du modèle
+module.exports = Matiere;
