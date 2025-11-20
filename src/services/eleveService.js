@@ -13,8 +13,8 @@ exports.getOne = (id) => {
 };
 
 exports.create = (data) => {
-  if (!data.nom || !data.sexe) {
-    throw new Error("Les champs 'nom' et 'sexe' sont obligatoires");
+  if (!data.nom || !data.sexe || !data.classe) {
+    throw new Error("Les champs 'nom', 'sexe' et 'classe' sont obligatoires");
   }
   return repository.create(data);
 };
