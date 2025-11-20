@@ -33,7 +33,7 @@ exports.update = (id, data) => {
   return trimestreRepository[index];
 };
 
-exports.remove = (id) => {
+exports.delete = (id) => {
   const index = trimestreRepository.findIndex((e) => e.idtrimestre === Number(id));
   if (index === -1) return null;
 

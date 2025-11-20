@@ -39,7 +39,7 @@ exports.update = (id, data) => {
   return notesRepository[index];
 };
 
-exports.remove = (id) => {
+exports.delete = (id) => {
   const index = notesRepository.findIndex((e) => e.idnotes === Number(id));
   if (index === -1) return null;
 
