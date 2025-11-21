@@ -6,8 +6,9 @@ const Professeur = require("../models/Professeur");
 const Classe = require("../models/Classe");
 const Eleve = require("../models/Eleve");
 const Matiere = require("../models/Matiere");
-//const Trimestre = require("../models/Trimestre");
-//const Note = require("../models/Note");
+const Trimestre = require("../models/Trimestre");
+const Note = require("../models/Notes");
+
 
 const seedDatabase = async () => {
   try {
@@ -554,26 +555,27 @@ const seedDatabase = async () => {
     ]);
     console.log(`✅ ${matieres.length} matières insérées`);
 
-    // // 5. Trimestres
-    // const trimestres = await Trimestre.insertMany([
-    //   { _id: 1, nom: "TRIM01", date: new Date("2023-12-01") },
-    //   { _id: 2, nom: "TRIM02", date: new Date("2024-03-08") },
-    //   { _id: 3, nom: "TRIM03", date: new Date("2024-06-21") },
-    // ]);
-    // console.log(`✅ ${trimestres.length} trimestres insérés`);
+    // 5. Trimestres
+    const trimestres = await Trimestre.insertMany([
+      { _id: 1, nom: "TRIM01", date: new Date("2023-12-01") },
+      { _id: 2, nom: "TRIM02", date: new Date("2024-03-08") },
+      { _id: 3, nom: "TRIM03", date: new Date("2024-06-21") },
+    ]);
+    console.log(`✅ ${trimestres.length} trimestres insérés`);
 
-    // // 6. Notes
-    // const notes = await Note.insertMany([
-    //   { _id: 1, dateSaisie: new Date("2019-10-15"), idEleve: 2, idClasse: 2, idMatiere: 5, idProf: 2, idTrimestre: 1, note: 12, avis: "Travail à approfondir", avancement: 0 },
-    //   { _id: 2, dateSaisie: new Date("2019-11-15"), idEleve: 3, idClasse: 1, idMatiere: 5, idProf: 2, idTrimestre: 1, note: 15, avis: "Bon travail", avancement: 0 },
-    //   { _id: 3, dateSaisie: new Date("2019-12-15"), idEleve: 2, idClasse: 2, idMatiere: 5, idProf: 2, idTrimestre: 1, note: 13, avis: "Travail en progression", avancement: 0 },
-    // ]);
-    // console.log(`✅ ${notes.length} notes insérées`);
+    // 6. Notes
+    const notes = await Note.insertMany([
+      { _id: 1, dateSaisie: new Date("2019-10-15"), idEleve: 2, idClasse: 2, idMatiere: 5, idProf: 2, idTrimestre: 1, note: 12, avis: "Travail à approfondir", avancement: 0 },
+      { _id: 2, dateSaisie: new Date("2019-11-15"), idEleve: 3, idClasse: 1, idMatiere: 5, idProf: 2, idTrimestre: 1, note: 15, avis: "Bon travail", avancement: 0 },
+      { _id: 3, dateSaisie: new Date("2019-12-15"), idEleve: 2, idClasse: 2, idMatiere: 5, idProf: 2, idTrimestre: 1, note: 13, avis: "Travail en progression", avancement: 0 },
+    ]);
+    console.log(`✅ ${notes.length} notes insérées`);
 
     console.log("\n🎉 Base de données peuplée avec succès !");
     process.exit(0);
   } catch (error) {
     console.error("❌ Erreur:", error.message);
+
     process.exit(1);
   }
 };
