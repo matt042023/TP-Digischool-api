@@ -1,4 +1,5 @@
 const express = require("express");
+const connectDB = require("./config/db");
 const classeRoutes = require("./routes/classeRoutes.js");
 const matiereRoutes = require("./routes/matiereRoutes.js");
 const eleveRoutes = require("./routes/eleveRoutes.js");
@@ -7,6 +8,7 @@ const notesRoutes = require("./routes/notesRoutes.js");
 const trimestreRoutes = require("./routes/trimestreRoutes.js");
 
 const app = express();
+connectDB();
 const PORT = 3000;
 
 // Middleware pour parser le JSON
