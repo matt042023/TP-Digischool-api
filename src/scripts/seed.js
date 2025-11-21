@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 
 // Import des modèles
 const Professeur = require("../models/Professeur");
-//const Classe = require("../models/Classe");
+const Classe = require("../models/Classe");
 const Eleve = require("../models/Eleve");
-//const Matiere = require("../models/Matiere");
+const Matiere = require("../models/Matiere");
 //const Trimestre = require("../models/Trimestre");
 //const Note = require("../models/Note");
 
@@ -17,9 +17,10 @@ const seedDatabase = async () => {
     // Nettoyage des collections
     await Promise.all([
       Professeur.deleteMany({}),
-      //Classe.deleteMany({}),
+      Classe.deleteMany({}),
       Eleve.deleteMany({}),
-      //Matiere.deleteMany({}),
+      Matiere.deleteMany({}),
+
       //Trimestre.deleteMany({}),
       //Note.deleteMany({}),
     ]);
@@ -51,15 +52,15 @@ const seedDatabase = async () => {
     ]);
     console.log(`✅ ${professeurs.length} professeurs insérés`);
 
-    // 2. Classes
-    // const classes = await Classe.insertMany([
-    //   { _id: 1, nom: "CP", prof: 1 },
-    //   { _id: 2, nom: "CE1", prof: 2 },
-    //   { _id: 3, nom: "CE2", prof: 2 },
-    //   { _id: 4, nom: "CM1", prof: 3 },
-    //   { _id: 5, nom: "CM2", prof: 3 },
-    // ]);
-    // console.log(`✅ ${classes.length} classes insérées`);
+    2. Classes
+    const classes = await Classe.insertMany([
+      { _id: 1, nom: "CP", prof: 1 },
+      { _id: 2, nom: "CE1", prof: 2 },
+      { _id: 3, nom: "CE2", prof: 2 },
+      { _id: 4, nom: "CM1", prof: 3 },
+      { _id: 5, nom: "CM2", prof: 3 },
+    ]);
+    console.log(`✅ ${classes.length} classes insérées`);
 
     // 3. Élèves
     const eleves = await Eleve.insertMany([
@@ -543,15 +544,15 @@ const seedDatabase = async () => {
     ]);
     console.log(`✅ ${eleves.length} élèves insérés`);
 
-    // 4. Matières
-    // const matieres = await Matiere.insertMany([
-    //   { _id: 1, nom: "LECTURE-CP" },
-    //   { _id: 2, nom: "LECTURE-CE1" },
-    //   { _id: 3, nom: "SCIENCES & DECOUVERTES" },
-    //   { _id: 4, nom: "MATHEMATIQUES" },
-    //   { _id: 5, nom: "EVEIL SPORTIF" },
-    // ]);
-    // console.log(`✅ ${matieres.length} matières insérées`);
+    4. Matières
+    const matieres = await Matiere.insertMany([
+      { _id: 1, nom: "LECTURE-CP" },
+      { _id: 2, nom: "LECTURE-CE1" },
+      { _id: 3, nom: "SCIENCES & DECOUVERTES" },
+      { _id: 4, nom: "MATHEMATIQUES" },
+      { _id: 5, nom: "EVEIL SPORTIF" },
+    ]);
+    console.log(`✅ ${matieres.length} matières insérées`);
 
     // // 5. Trimestres
     // const trimestres = await Trimestre.insertMany([

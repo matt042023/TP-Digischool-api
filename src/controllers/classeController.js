@@ -1,51 +1,56 @@
-const ClasseService = require("../services/classeService.js");
+const ClasseService = require("../services/classeService");
 
 class ClasseController {
-  getAll(req, res) {
+  // GET /classes
+  async getAll(req, res) {
     try {
-      const classes = ClasseService.getAllClasses();
+      const classes = await ClasseService.getAll();
       res.json(classes);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 
-  getById(req, res) {
+  // GET /classes/:id
+  async getById(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      const classe = ClasseService.getClasseById(id);
+      const classe = await ClasseService.getById(req.params.id);
+      if (!classe) return res.status(404).json({ error: "Classe non trouvée" });
       res.json(classe);
-    } catch (err) {
-      res.status(404).json({ message: err.message });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 
-  create(req, res) {
+  // POST /classes
+  async create(req, res) {
     try {
-      const newClasse = ClasseService.createClasse(req.body);
+      const newClasse = await ClasseService.create(req.body);
       res.status(201).json(newClasse);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   }
 
-  update(req, res) {
+  // PUT /classes/:id
+  async update(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      const updatedClasse = ClasseService.updateClasse(id, req.body);
+      const updatedClasse = await ClasseService.update(req.params.id, req.body);
+      if (!updatedClasse) return res.status(404).json({ error: "Classe non trouvée" });
       res.json(updatedClasse);
-    } catch (err) {
-      res.status(404).json({ message: err.message });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   }
 
-  delete(req, res) {
+  // DELETE /classes/:id
+  async delete(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      const deletedClasse = ClasseService.deleteClasse(id);
-      res.json(deletedClasse);
-    } catch (err) {
-      res.status(404).json({ message: err.message });
+      const deletedClasse = await ClasseService.delete(req.params.id);
+      if (!deletedClasse) return res.status(404).json({ error: "Classe non trouvée" });
+      res.json({ message: "Classe supprimée" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 }

@@ -1,51 +1,51 @@
-const MatiereService = require("../services/matiereService.js");
+const MatiereService = require("../services/matiereService");
 
 class MatiereController {
-  getAll(req, res) {
+  async getAll(req, res) {
     try {
-      const matieres = MatiereService.getAllMatieres();
+      const matieres = await MatiereService.getAll();
       res.json(matieres);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 
-  getById(req, res) {
+  async getById(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      const matiere = MatiereService.getMatiereById(id);
+      const matiere = await MatiereService.getById(req.params.id);
+      if (!matiere) return res.status(404).json({ error: "Matière non trouvée" });
       res.json(matiere);
-    } catch (err) {
-      res.status(404).json({ message: err.message });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 
-  create(req, res) {
+  async create(req, res) {
     try {
-      const newMatiere = MatiereService.createMatiere(req.body);
+      const newMatiere = await MatiereService.create(req.body);
       res.status(201).json(newMatiere);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   }
 
-  update(req, res) {
+  async update(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      const updatedMatiere = MatiereService.updateMatiere(id, req.body);
+      const updatedMatiere = await MatiereService.update(req.params.id, req.body);
+      if (!updatedMatiere) return res.status(404).json({ error: "Matière non trouvée" });
       res.json(updatedMatiere);
-    } catch (err) {
-      res.status(404).json({ message: err.message });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   }
 
-  delete(req, res) {
+  async delete(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      const deletedMatiere = MatiereService.deleteMatiere(id);
-      res.json(deletedMatiere);
-    } catch (err) {
-      res.status(404).json({ message: err.message });
+      const deletedMatiere = await MatiereService.delete(req.params.id);
+      if (!deletedMatiere) return res.status(404).json({ error: "Matière non trouvée" });
+      res.json({ message: "Matière supprimée" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 }

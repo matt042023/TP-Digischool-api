@@ -1,33 +1,30 @@
-const classes = require("../models/Classe.js");
+const Classe = require("../models/Classe.js");
 
 class ClasseRepository {
-  getAll() {
-    return classes;
+  // Récupérer toutes les classes
+  async getAll() {
+    return await Classe.find();
   }
 
-  getById(id) {
-    return classes.find(c => c.id === id);
+  // Récupérer une classe par son id
+  async getById(id) {
+    return await Classe.findById(id);
   }
 
-  create(classe) {
-    classe.id = classes.length ? classes[classes.length - 1].id + 1 : 1;
-    classes.push(classe);
-    return classe;
+  // Créer une nouvelle classe
+  async create(classeData) {
+    const classe = new Classe(classeData);
+    return await classe.save();
   }
 
-  update(id, updatedClasse) {
-    const index = classes.findIndex(c => c.id === id);
-    if (index !== -1) {
-      classes[index] = { id, ...updatedClasse };
-      return classes[index];
-    }
-    return null;
+  // Mettre à jour une classe
+  async update(id, updateData) {
+    return await Classe.findByIdAndUpdate(id, updateData, { new: true });
   }
 
-  delete(id) {
-    const index = classes.findIndex(c => c.id === id);
-    if (index !== -1) return classes.splice(index, 1)[0];
-    return null;
+  // Supprimer une classe
+  async delete(id) {
+    return await Classe.findByIdAndDelete(id);
   }
 }
 
