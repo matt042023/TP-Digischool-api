@@ -1,34 +1,34 @@
-const repository = require("../repositories/eleveRepository");
+const Eleve = require("../models/Eleve");
 
-exports.getAll = () => {
-  return repository.findAll();
+exports.getAll = async () => {
+  return await Eleve.find();
 };
 
-exports.getOne = (id) => {
-  const eleve = repository.findById(id);
+exports.getOne = async (id) => {
+  const eleve = await Eleve.findById(id);
   if (!eleve) {
     throw new Error("Élève introuvable");
   }
   return eleve;
 };
 
-exports.create = (data) => {
+exports.create = async (data) => {
   if (!data.nom || !data.sexe || !data.classe) {
     throw new Error("Les champs 'nom', 'sexe' et 'classe' sont obligatoires");
   }
-  return repository.create(data);
+  return await Eleve.create(data);
 };
 
-exports.update = (id, data) => {
-  const updated = repository.update(id, data);
+exports.update = async (id, data) => {
+  const updated = await Eleve.findByIdAndUpdate(id, data, { new: true });
   if (!updated) {
     throw new Error("Impossible de mettre à jour cet élève");
   }
   return updated;
 };
 
-exports.remove = (id) => {
-  const deleted = repository.remove(id);
+exports.remove = async (id) => {
+  const deleted = await Eleve.findByIdAndDelete(id);
   if (!deleted) {
     throw new Error("Impossible de supprimer cet élève");
   }

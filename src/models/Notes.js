@@ -1,40 +1,47 @@
-let notes = [
-  {
-    "idnotes": 1,
-    "date_saisie": "2019-10-15T08:07:03.000Z",
-    "ideleve": 2,
-    "idclasse": 2,
-    "idmatiere": 5,
-    "idprof": 2,
-    "idtrimestre": 1,
-    "note": 12,
-    "avis": "Travail à approfondir",
-    "avancement": 0
-  },
-  {
-    "idnotes": 2,
-    "date_saisie": "2019-11-15T08:07:03.000Z",
-    "ideleve": 3,
-    "idclasse": 1,
-    "idmatiere": 5,
-    "idprof": 2,
-    "idtrimestre": 1,
-    "note": 15,
-    "avis": "Bon travail",
-    "avancement": 0
-  },
-  {
-    "idnotes": 3,
-    "date_saisie": "2019-12-15T08:07:03.000Z",
-    "ideleve": 2,
-    "idclasse": 2,
-    "idmatiere": 5,
-    "idprof": 2,
-    "idtrimestre": 1,
-    "note": 13,
-    "avis": "Travail en progression",
-    "avancement": 0
-  }
-]
+const mongoose = require("mongoose");
 
-module.exports = notes;
+const NotesSchema = new mongoose.Schema({
+  dateSaisie: {
+    type: Date,
+    default: Date.now
+  },
+  idEleve: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Eleve",
+    required: true
+  },
+  idClasse: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Classe",
+    required: true
+  },
+  idMatiere: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Matiere",
+    required: true
+  },
+  idProf: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Professeur",
+    required: true
+  },
+  idTrimestre: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Trimestre",
+    required: true
+  },
+  note: {
+    type: Number,
+    required: true
+  },
+  avis: {
+    type: String,
+    required: true
+  },
+  avancement: {
+    type: Number,
+    required: true
+  }
+});
+
+module.exports = mongoose.model("Notes", NotesSchema);

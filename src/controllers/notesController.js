@@ -1,44 +1,44 @@
 const notesService = require("../services/notesService");
 
-exports.createNote = (req, res) => {
+exports.createNote = async (req, res) => {
   try {
-    const note = notesService.createNote(req.body);
+    const note = await notesService.createNote(req.body);
     res.status(201).json(note);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.getAllNotes = (req, res) => {
+exports.getAllNotes = async (req, res) => {
   try {
-    const notes = notesService.getAllNotes();
+    const notes = await notesService.getAllNotes();
     res.json(notes);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.getNoteById = (req, res) => {
+exports.getNoteById = async (req, res) => {
   try {
-    const note = notesService.getNoteById(req.params.id);
+    const note = await notesService.getNoteById(req.params.id);
     res.json(note);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.updateNote = (req, res) => {
+exports.updateNote = async (req, res) => {
   try {
-    const note = notesService.updateNote(req.params.id, req.body);
+    const note = await notesService.updateNote(req.params.id, req.body);
     res.json(note);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.deleteNote = (req, res) => {
+exports.deleteNote = async (req, res) => {
   try {
-    notesService.deleteNote(req.params.id);
+    await notesService.deleteNote(req.params.id);
     res.json({ message: "Note supprimée" });
   } catch (err) {
     res.status(500).json({ error: err.message });

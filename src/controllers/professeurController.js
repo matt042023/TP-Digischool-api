@@ -1,40 +1,44 @@
 const professeurService = require("../services/professeurService");
 
-exports.getAll = (req, res) => {
-  const data = professeurService.getAll();
-  res.json(data);
+exports.getAll = async (req, res) => {
+  try {
+    const data = await professeurService.getAll();
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
 };
 
-exports.getOne = (req, res) => {
+exports.getOne = async (req, res) => {
   try {
-    const prof = professeurService.getOne(req.params.id);
+    const prof = await professeurService.getOne(req.params.id);
     res.json(prof);
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
 };
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   try {
-    const prof = professeurService.create(req.body);
+    const prof = await professeurService.create(req.body);
     res.status(201).json(prof);
   } catch (e) {
     res.status(400).json({ message: e.message });
   }
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   try {
-    const prof = professeurService.update(req.params.id, req.body);
+    const prof = await professeurService.update(req.params.id, req.body);
     res.json(prof);
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
 };
 
-exports.remove = (req, res) => {
+exports.remove = async (req, res) => {
   try {
-    professeurService.remove(req.params.id);
+    await professeurService.remove(req.params.id);
     res.json({ message: "Professeur supprimé avec succès" });
   } catch (e) {
     res.status(404).json({ message: e.message });
