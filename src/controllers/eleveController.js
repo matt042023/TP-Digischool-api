@@ -11,7 +11,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   try {
-    const eleve = await eleveService.getOne(req.params.id);
+    const eleve = await eleveService.getById(req.params.id);
     res.json(eleve);
   } catch (e) {
     res.status(404).json({ message: e.message });
@@ -38,7 +38,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    await eleveService.remove(req.params.id);
+    await eleveService.delete(req.params.id);
     res.json({ message: "Élève supprimé avec succès" });
   } catch (e) {
     res.status(404).json({ message: e.message });

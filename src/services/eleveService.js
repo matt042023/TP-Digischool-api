@@ -1,36 +1,40 @@
-const Eleve = require("../models/Eleve");
+const EleveRepository = require("../repositories/eleveRepository");
 
-exports.getAll = async () => {
-  return await Eleve.find();
-};
-
-exports.getOne = async (id) => {
-  const eleve = await Eleve.findById(id);
-  if (!eleve) {
-    throw new Error("Élève introuvable");
+class EleveService {
+  async getAll() {
+    return await EleveRepository.findAll();
   }
-  return eleve;
-};
 
-exports.create = async (data) => {
-  if (!data.nom || !data.sexe || !data.classe) {
-    throw new Error("Les champs 'nom', 'sexe' et 'classe' sont obligatoires");
+  async getById(id) {
+    const eleve = await EleveRepository.findById(id);
+    if (!eleve) {
+      throw new Error("Élève introuvable");
+    }
+    return eleve;
   }
-  return await Eleve.create(data);
-};
 
-exports.update = async (id, data) => {
-  const updated = await Eleve.findByIdAndUpdate(id, data, { new: true });
-  if (!updated) {
-    throw new Error("Impossible de mettre à jour cet élève");
+  async create(data) {
+    if (!data.nom || !data.sexe || !data.classe) {
+      throw new Error("Les champs 'nom', 'sexe' et 'classe' sont obligatoires");
+    }
+    return await EleveRepository.create(data);
   }
-  return updated;
-};
 
-exports.remove = async (id) => {
-  const deleted = await Eleve.findByIdAndDelete(id);
-  if (!deleted) {
-    throw new Error("Impossible de supprimer cet élève");
+  async update(id, data) {
+    const updated = await EleveRepository.update(id, data);
+    if (!updated) {
+      throw new Error("Impossible de mettre à jour cet élève");
+    }
+    return updated;
   }
-  return deleted;
-};
+
+  async delete(id) {
+    const deleted = await EleveRepository.remove(id);
+    if (!deleted) {
+      throw new Error("Impossible de supprimer cet élève");
+    }
+    return deleted;
+  }
+}
+
+module.exports = new EleveService();
