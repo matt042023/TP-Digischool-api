@@ -1,31 +1,33 @@
 const mongoose = require("mongoose");
 
 const NotesSchema = new mongoose.Schema({
-  date_saisie: {
+  dateSaisie: {
     type: Date,
     default: Date.now
   },
-  ideleve: {
-    type: Number,
+  idEleve: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Eleve",
     required: true
   },
-  idclasse: {
-    type: Number,
+  idClasse: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Classe",
     required: true
   },
-  idmatiere: {
-    type: Number,
+  idMatiere: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Matiere",
     required: true
   },
-  idprof: {
-    type: Number,
+  idProf: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Professeur",
     required: true
   },
-  idtrimestre: {
-    type: Number,
+  idTrimestre: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Trimestre",
     required: true
   },
   note: {

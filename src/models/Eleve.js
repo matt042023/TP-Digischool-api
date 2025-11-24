@@ -4,7 +4,7 @@ const EleveSchema = new mongoose.Schema(
   {
     nom: { type: String, required: true },
     prenom: { type: String, required: false },
-    classe: { type: Number, required: true },
+    classe: { type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: true },
     date_naissance: { type: Date },
     adresse: { type: String },
     sexe: { type: String, enum: ["HOMME", "FEMME"], required: true },
