@@ -20,9 +20,8 @@ const seedDatabase = async () => {
       Classe.deleteMany({}),
       Eleve.deleteMany({}),
       Matiere.deleteMany({}),
-
-      //Trimestre.deleteMany({}),
-      //Note.deleteMany({}),
+      Trimestre.deleteMany({}),
+      Note.deleteMany({}),
     ]);
     console.log("🧹 Collections nettoyées");
 

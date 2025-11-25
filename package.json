@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "seed": "node src/scripts/seed.js",
     "import": "node src/scripts/importFromSQL"
-
   },
   "keywords": [],
   "author": "",
@@ -21,6 +20,8 @@
     "mongoose": "^8.20.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.1.4"
   }
 }
