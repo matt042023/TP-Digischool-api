@@ -1,55 +1,75 @@
-const MatiereService = require('../../src/services/matiereService');
-const MatiereRepository = require('../../src/repositories/matiereRepository');
+const matiereService = require("../../src/services/matiereService");
+const MatiereRepository = require("../../src/repositories/matiereRepository");
 
-jest.mock('../../src/repositories/matiereRepository');
+jest.mock("../../src/repositories/matiereRepository");
 
-describe('MatiereService', () => {
-    afterEach(() => {
-        jest.clearAllMocks();
+describe("MatiereService", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe("getById", () => {
+    it("devrait retourner une matière par son id", async () => {
+      const mockMatiere = { _id: "1", nom: "Mathématiques" };
+      MatiereRepository.getById.mockResolvedValue(mockMatiere);
+
+      const result = await matiereService.getById("1");
+
+      expect(result).toEqual(mockMatiere);
+      expect(MatiereRepository.getById).toHaveBeenCalledWith("1");
     });
+  });
 
-    it('doit retourner une matière par id', async () => {
-        const fake = { _id: '1', nom: 'Maths' };
-        MatiereRepository.getById.mockResolvedValue(fake);
+  describe("getAll", () => {
+    it("devrait retourner toutes les matières", async () => {
+      const mockMatieres = [
+        { _id: "1", nom: "Mathématiques" },
+        { _id: "2", nom: "Français" },
+      ];
+      MatiereRepository.getAll.mockResolvedValue(mockMatieres);
 
-        const result = await MatiereService.getById('1');
-        expect(result).toEqual(fake);
-        expect(MatiereRepository.getById).toHaveBeenCalledWith('1');
+      const result = await matiereService.getAll();
+
+      expect(result).toEqual(mockMatieres);
+      expect(MatiereRepository.getAll).toHaveBeenCalledTimes(1);
     });
+  });
 
-    it('doit retourner toutes les matières', async () => {
-        const list = [{ _id: '1', nom: 'Maths' }, { _id: '2', nom: 'Français' }];
-        MatiereRepository.getAll.mockResolvedValue(list);
+  describe("create", () => {
+    it("devrait créer une nouvelle matière", async () => {
+      const newMatiere = { nom: "Histoire" };
+      const createdMatiere = { _id: "3", ...newMatiere };
+      MatiereRepository.create.mockResolvedValue(createdMatiere);
 
-        const result = await MatiereService.getAll();
-        expect(result).toEqual(list);
-        expect(MatiereRepository.getAll).toHaveBeenCalled();
+      const result = await matiereService.create(newMatiere);
+
+      expect(result).toEqual(createdMatiere);
+      expect(MatiereRepository.create).toHaveBeenCalledWith(newMatiere);
     });
+  });
 
-    it('doit créer une nouvelle matière', async () => {
-        const newMatiere = { _id: '3', nom: 'Histoire' };
-        MatiereRepository.create.mockResolvedValue(newMatiere);
+  describe("update", () => {
+    it("devrait mettre à jour une matière", async () => {
+      const updateData = { nom: "Mathématiques Avancées" };
+      const updatedMatiere = { _id: "1", nom: "Mathématiques Avancées" };
+      MatiereRepository.update.mockResolvedValue(updatedMatiere);
 
-        const result = await MatiereService.create({ nom: 'Histoire' });
-        expect(result).toEqual(newMatiere);
-        expect(MatiereRepository.create).toHaveBeenCalledWith({ nom: 'Histoire' });
+      const result = await matiereService.update("1", updateData);
+
+      expect(result).toEqual(updatedMatiere);
+      expect(MatiereRepository.update).toHaveBeenCalledWith("1", updateData);
     });
+  });
 
-    it('doit mettre à jour une matière', async () => {
-        const updatedMatiere = { _id: '1', nom: 'Maths Avancé' };
-        MatiereRepository.update.mockResolvedValue(updatedMatiere);
+  describe("delete", () => {
+    it("devrait supprimer une matière", async () => {
+      const deletedMatiere = { _id: "1", nom: "Mathématiques" };
+      MatiereRepository.delete.mockResolvedValue(deletedMatiere);
 
-        const result = await MatiereService.update('1', { nom: 'Maths Avancé' });
-        expect(result).toEqual(updatedMatiere);
-        expect(MatiereRepository.update).toHaveBeenCalledWith('1', { nom: 'Maths Avancé' });
+      const result = await matiereService.delete("1");
+
+      expect(result).toEqual(deletedMatiere);
+      expect(MatiereRepository.delete).toHaveBeenCalledWith("1");
     });
-
-    it('doit supprimer une matière', async () => {
-        const deletedMatiere = { _id: '1', nom: 'Maths' };
-        MatiereRepository.delete.mockResolvedValue(deletedMatiere);
-
-        const result = await MatiereService.delete('1');
-        expect(result).toEqual(deletedMatiere);
-        expect(MatiereRepository.delete).toHaveBeenCalledWith('1');
-    });
+  });
 });

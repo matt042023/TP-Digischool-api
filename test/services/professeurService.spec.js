@@ -42,7 +42,7 @@ describe("ProfesseurService", () => {
   });
 
   describe("create", () => {
-    it("devrait creer un nouveau professeur", async () => {
+    it("devrait créer un nouveau professeur", async () => {
       const newProf = { nom: "Moreau", sexe: "F" };
       const createdProf = { _id: "3", ...newProf };
       ProfesseurRepository.create.mockResolvedValue(createdProf);
@@ -71,7 +71,7 @@ describe("ProfesseurService", () => {
   });
 
   describe("update", () => {
-    it("devrait mettre a jour un professeur", async () => {
+    it("devrait mettre à jour un professeur", async () => {
       const updateData = { nom: "Leroy-Dupont" };
       const updatedProf = { _id: "1", nom: "Leroy-Dupont", sexe: "M" };
       ProfesseurRepository.update.mockResolvedValue(updatedProf);

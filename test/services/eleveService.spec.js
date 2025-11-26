@@ -42,7 +42,7 @@ describe("EleveService", () => {
   });
 
   describe("create", () => {
-    it("devrait creer un nouvel eleve", async () => {
+    it("devrait créer un nouvel eleve", async () => {
       const newEleve = { nom: "Durand", sexe: "M", classe: "classId1" };
       const createdEleve = { _id: "3", ...newEleve };
       EleveRepository.create.mockResolvedValue(createdEleve);
@@ -79,7 +79,7 @@ describe("EleveService", () => {
   });
 
   describe("update", () => {
-    it("devrait mettre a jour un eleve", async () => {
+    it("devrait mettre à jour un eleve", async () => {
       const updateData = { nom: "Dupont-Martin" };
       const updatedEleve = { _id: "1", nom: "Dupont-Martin", sexe: "M", classe: "classId1" };
       EleveRepository.update.mockResolvedValue(updatedEleve);

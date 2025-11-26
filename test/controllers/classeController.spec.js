@@ -1,172 +1,158 @@
-const ClasseController = require("../../src/controllers/classeController");
-const ClasseService = require("../../src/services/classeService");
+const request = require("supertest");
+const app = require("../../src/index");
+const classeService = require("../../src/services/classeService");
 
-jest.mock("../../src/services/classeService"); // mock du service
-
-// helper pour mocker res
-function mockResponse() {
-  return {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn(),
-  };
-}
+jest.mock("../../src/services/classeService");
+jest.mock("../../src/config/db", () => jest.fn());
 
 describe("ClasseController", () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("getAll should return list of classes", async () => {
-    const req = {};
-    const res = mockResponse();
+  describe("GET /classes", () => {
+    it("devrait retourner toutes les classes avec status 200", async () => {
+      const mockClasses = [
+        { _id: "1", nom: "6A", prof: "profId1" },
+        { _id: "2", nom: "5B", prof: "profId2" },
+      ];
+      classeService.getAll.mockResolvedValue(mockClasses);
 
-    ClasseService.getAll.mockResolvedValue([{ _id: "1", nom: "6A" }]);
+      const response = await request(app).get("/classes");
 
-    await ClasseController.getAll(req, res);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockClasses);
+      expect(classeService.getAll).toHaveBeenCalledTimes(1);
+    });
 
-    expect(ClasseService.getAll).toHaveBeenCalled();
-    expect(res.json).toHaveBeenCalledWith([{ _id: "1", nom: "6A" }]);
+    it("devrait retourner status 500 en cas d'erreur", async () => {
+      classeService.getAll.mockRejectedValue(new Error("Erreur serveur"));
+
+      const response = await request(app).get("/classes");
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe("Erreur serveur");
+    });
   });
 
-  test("getAll should catch errors", async () => {
-    const req = {};
-    const res = mockResponse();
+  describe("GET /classes/:id", () => {
+    it("devrait retourner une classe par son id avec status 200", async () => {
+      const mockClasse = { _id: "1", nom: "6A", prof: "profId1" };
+      classeService.getById.mockResolvedValue(mockClasse);
 
-    ClasseService.getAll.mockRejectedValue(new Error("DB error"));
+      const response = await request(app).get("/classes/1");
 
-    await ClasseController.getAll(req, res);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockClasse);
+      expect(classeService.getById).toHaveBeenCalledWith("1");
+    });
 
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: "DB error" });
+    it("devrait retourner status 404 si la classe n'existe pas", async () => {
+      classeService.getById.mockResolvedValue(null);
+
+      const response = await request(app).get("/classes/999");
+
+      expect(response.status).toBe(404);
+      expect(response.body.error).toContain("trouvée");
+    });
+
+    it("devrait retourner status 500 en cas d'erreur", async () => {
+      classeService.getById.mockRejectedValue(new Error("Erreur serveur"));
+
+      const response = await request(app).get("/classes/1");
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe("Erreur serveur");
+    });
   });
 
-  test("getById should return a class", async () => {
-    const req = { params: { id: "1" } };
-    const res = mockResponse();
+  describe("POST /classes", () => {
+    it("devrait créer une classe avec status 201", async () => {
+      const newClasse = { nom: "6A", prof: "profId1" };
+      const createdClasse = { _id: "1", ...newClasse };
+      classeService.create.mockResolvedValue(createdClasse);
 
-    ClasseService.getById.mockResolvedValue({ _id: "1", nom: "6A" });
+      const response = await request(app).post("/classes").send(newClasse);
 
-    await ClasseController.getById(req, res);
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(createdClasse);
+      expect(classeService.create).toHaveBeenCalledWith(newClasse);
+    });
 
-    expect(ClasseService.getById).toHaveBeenCalledWith("1");
-    expect(res.json).toHaveBeenCalledWith({ _id: "1", nom: "6A" });
+    it("devrait retourner status 400 si données invalides", async () => {
+      const invalidClasse = {};
+      classeService.create.mockRejectedValue(
+        new Error("Les champs sont obligatoires")
+      );
+
+      const response = await request(app).post("/classes").send(invalidClasse);
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toContain("obligatoires");
+    });
   });
 
-  test("getById should return 404 if not found", async () => {
-    const req = { params: { id: "999" } };
-    const res = mockResponse();
+  describe("PUT /classes/:id", () => {
+    it("devrait mettre à jour une classe avec status 200", async () => {
+      const updateData = { nom: "6B" };
+      const updatedClasse = { _id: "1", nom: "6B", prof: "profId1" };
+      classeService.update.mockResolvedValue(updatedClasse);
 
-    ClasseService.getById.mockResolvedValue(null);
+      const response = await request(app).put("/classes/1").send(updateData);
 
-    await ClasseController.getById(req, res);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(updatedClasse);
+      expect(classeService.update).toHaveBeenCalledWith("1", updateData);
+    });
 
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: "Classe non trouvée" });
+    it("devrait retourner status 404 si la classe n'existe pas", async () => {
+      classeService.update.mockResolvedValue(null);
+
+      const response = await request(app)
+        .put("/classes/999")
+        .send({ nom: "Test" });
+
+      expect(response.status).toBe(404);
+      expect(response.body.error).toContain("trouvée");
+    });
+
+    it("devrait retourner status 400 en cas d'erreur", async () => {
+      classeService.update.mockRejectedValue(new Error("Erreur de mise à jour"));
+
+      const response = await request(app).put("/classes/1").send({ nom: "6B" });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe("Erreur de mise à jour");
+    });
   });
 
-  test("getById should catch errors", async () => {
-    const req = { params: { id: "1" } };
-    const res = mockResponse();
+  describe("DELETE /classes/:id", () => {
+    it("devrait supprimer une classe avec status 200", async () => {
+      classeService.delete.mockResolvedValue({ _id: "1" });
 
-    ClasseService.getById.mockRejectedValue(new Error("DB error"));
+      const response = await request(app).delete("/classes/1");
 
-    await ClasseController.getById(req, res);
+      expect(response.status).toBe(200);
+      expect(response.body.message).toContain("supprimée");
+      expect(classeService.delete).toHaveBeenCalledWith("1");
+    });
 
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: "DB error" });
-  });
+    it("devrait retourner status 404 si la classe n'existe pas", async () => {
+      classeService.delete.mockResolvedValue(null);
 
-  test("create should return 201 with new class", async () => {
-    const req = { body: { nom: "6A", prof: "123" } };
-    const res = mockResponse();
+      const response = await request(app).delete("/classes/999");
 
-    ClasseService.create.mockResolvedValue({ _id: "1", nom: "6A" });
+      expect(response.status).toBe(404);
+      expect(response.body.error).toContain("trouvée");
+    });
 
-    await ClasseController.create(req, res);
+    it("devrait retourner status 500 en cas d'erreur", async () => {
+      classeService.delete.mockRejectedValue(new Error("Impossible de supprimer"));
 
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({ _id: "1", nom: "6A" });
-  });
+      const response = await request(app).delete("/classes/1");
 
-  test("create should catch errors", async () => {
-    const req = { body: { nom: "6A" } };
-    const res = mockResponse();
-
-    ClasseService.create.mockRejectedValue(new Error("DB error"));
-
-    await ClasseController.create(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: "DB error" });
-  });
-
-  test("update should return updated class", async () => {
-    const req = { params: { id: "1" }, body: { nom: "6B" } };
-    const res = mockResponse();
-
-    ClasseService.update.mockResolvedValue({ _id: "1", nom: "6B" });
-
-    await ClasseController.update(req, res);
-
-    expect(res.json).toHaveBeenCalledWith({ _id: "1", nom: "6B" });
-  });
-
-  test("update should return 404 if class not found", async () => {
-    const req = { params: { id: "999" }, body: { nom: "6B" } };
-    const res = mockResponse();
-
-    ClasseService.update.mockResolvedValue(null);
-
-    await ClasseController.update(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: "Classe non trouvée" });
-  });
-
-  test("update should catch errors", async () => {
-    const req = { params: { id: "1" }, body: { nom: "6B" } };
-    const res = mockResponse();
-
-    ClasseService.update.mockRejectedValue(new Error("DB error"));
-
-    await ClasseController.update(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: "DB error" });
-  });
-
-  test("delete should return success message", async () => {
-    const req = { params: { id: "1" } };
-    const res = mockResponse();
-
-    ClasseService.delete.mockResolvedValue(true);
-
-    await ClasseController.delete(req, res);
-
-    expect(res.json).toHaveBeenCalledWith({ message: "Classe supprimée" });
-  });
-
-  test("delete should return 404 if class not found", async () => {
-    const req = { params: { id: "999" } };
-    const res = mockResponse();
-
-    ClasseService.delete.mockResolvedValue(null);
-
-    await ClasseController.delete(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: "Classe non trouvée" });
-  });
-
-  test("delete should catch errors", async () => {
-    const req = { params: { id: "1" } };
-    const res = mockResponse();
-
-    ClasseService.delete.mockRejectedValue(new Error("DB error"));
-
-    await ClasseController.delete(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: "DB error" });
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe("Impossible de supprimer");
+    });
   });
 });

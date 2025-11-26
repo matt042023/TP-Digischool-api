@@ -31,7 +31,7 @@ describe("ProfesseurController", () => {
       const response = await request(app).get("/professeurs");
 
       expect(response.status).toBe(500);
-      expect(response.body.message).toBe("Erreur serveur");
+      expect(response.body).toMatchObject({ message: "Erreur serveur" });
     });
   });
 
@@ -48,17 +48,19 @@ describe("ProfesseurController", () => {
     });
 
     it("devrait retourner status 404 si le professeur n'existe pas", async () => {
-      professeurService.getById.mockRejectedValue(new Error("Professeur introuvable"));
+      professeurService.getById.mockRejectedValue(
+        new Error("Professeur introuvable")
+      );
 
       const response = await request(app).get("/professeurs/999");
 
       expect(response.status).toBe(404);
-      expect(response.body.message).toContain("introuvable");
+      expect(response.body).toMatchObject({ message: expect.stringContaining("introuvable") });
     });
   });
 
   describe("POST /professeurs", () => {
-    it("devrait creer un professeur avec status 201", async () => {
+    it("devrait créer un professeur avec status 201", async () => {
       const newProf = { nom: "Moreau", sexe: "F" };
       const createdProf = { _id: "3", ...newProf };
       professeurService.create.mockResolvedValue(createdProf);
@@ -70,7 +72,7 @@ describe("ProfesseurController", () => {
       expect(professeurService.create).toHaveBeenCalledWith(newProf);
     });
 
-    it("devrait retourner status 400 si donnees invalides", async () => {
+    it("devrait retourner status 400 si données invalides", async () => {
       const invalidProf = { sexe: "M" };
       professeurService.create.mockRejectedValue(
         new Error("Les champs sont obligatoires")
@@ -79,12 +81,12 @@ describe("ProfesseurController", () => {
       const response = await request(app).post("/professeurs").send(invalidProf);
 
       expect(response.status).toBe(400);
-      expect(response.body.message).toContain("obligatoires");
+      expect(response.body).toMatchObject({ message: expect.stringContaining("obligatoires") });
     });
   });
 
   describe("PUT /professeurs/:id", () => {
-    it("devrait mettre a jour un professeur avec status 200", async () => {
+    it("devrait mettre à jour un professeur avec status 200", async () => {
       const updateData = { nom: "Leroy-Dupont" };
       const updatedProf = { _id: "1", nom: "Leroy-Dupont", sexe: "M" };
       professeurService.update.mockResolvedValue(updatedProf);
@@ -98,13 +100,15 @@ describe("ProfesseurController", () => {
 
     it("devrait retourner status 404 si le professeur n'existe pas", async () => {
       professeurService.update.mockRejectedValue(
-        new Error("Impossible de mettre a jour")
+        new Error("Impossible de mettre à jour")
       );
 
-      const response = await request(app).put("/professeurs/999").send({ nom: "Test" });
+      const response = await request(app)
+        .put("/professeurs/999")
+        .send({ nom: "Test" });
 
       expect(response.status).toBe(404);
-      expect(response.body.message).toContain("Impossible");
+      expect(response.body).toMatchObject({ message: expect.stringContaining("Impossible") });
     });
   });
 
@@ -115,7 +119,7 @@ describe("ProfesseurController", () => {
       const response = await request(app).delete("/professeurs/1");
 
       expect(response.status).toBe(200);
-      expect(response.body.message).toContain("supprim");
+      expect(response.body).toMatchObject({ message: expect.stringContaining("supprim") });
       expect(professeurService.delete).toHaveBeenCalledWith("1");
     });
 
@@ -127,7 +131,7 @@ describe("ProfesseurController", () => {
       const response = await request(app).delete("/professeurs/999");
 
       expect(response.status).toBe(404);
-      expect(response.body.message).toContain("Impossible");
+      expect(response.body).toMatchObject({ message: expect.stringContaining("Impossible") });
     });
   });
 });

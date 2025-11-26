@@ -1,60 +1,79 @@
 const Matiere = require("../../src/models/Matiere");
 const MatiereRepository = require("../../src/repositories/matiereRepository");
 
-jest.mock("../../src/models/Matiere"); // mock de Mongoose
+jest.mock("../../src/models/Matiere");
 
 describe("MatiereRepository", () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("getAll should call Matiere.find", async () => {
-    const fakeMatieres = [{ _id: "1", nom: "Maths" }];
-    Matiere.find.mockResolvedValue(fakeMatieres);
+  describe("getAll", () => {
+    it("devrait appeler Matiere.find()", async () => {
+      const mockMatieres = [{ _id: "1", nom: "Mathématiques" }];
+      Matiere.find.mockResolvedValue(mockMatieres);
 
-    const result = await MatiereRepository.getAll();
+      const result = await MatiereRepository.getAll();
 
-    expect(Matiere.find).toHaveBeenCalled();
-    expect(result).toEqual(fakeMatieres);
+      expect(Matiere.find).toHaveBeenCalledTimes(1);
+      expect(result).toEqual(mockMatieres);
+    });
   });
 
-  test("getById should call Matiere.findById", async () => {
-    const fakeMatiere = { _id: "1", nom: "Maths" };
-    Matiere.findById.mockResolvedValue(fakeMatiere);
+  describe("getById", () => {
+    it("devrait appeler Matiere.findById()", async () => {
+      const mockMatiere = { _id: "1", nom: "Mathématiques" };
+      Matiere.findById.mockResolvedValue(mockMatiere);
 
-    const result = await MatiereRepository.getById("1");
+      const result = await MatiereRepository.getById("1");
 
-    expect(Matiere.findById).toHaveBeenCalledWith("1");
-    expect(result).toEqual(fakeMatiere);
+      expect(Matiere.findById).toHaveBeenCalledWith("1");
+      expect(result).toEqual(mockMatiere);
+    });
   });
 
-  test("create should instantiate Matiere and save it", async () => {
-    const fakeMatiere = { nom: "Maths", save: jest.fn().mockResolvedValue({ _id: "1", nom: "Maths" }) };
-    Matiere.mockImplementation(() => fakeMatiere);
+  describe("create", () => {
+    it("devrait instancier Matiere et appeler save()", async () => {
+      const mockMatiere = {
+        nom: "Mathématiques",
+        save: jest
+          .fn()
+          .mockResolvedValue({ _id: "1", nom: "Mathématiques" }),
+      };
+      Matiere.mockImplementation(() => mockMatiere);
 
-    const result = await MatiereRepository.create({ nom: "Maths" });
+      const result = await MatiereRepository.create({ nom: "Mathématiques" });
 
-    expect(fakeMatiere.save).toHaveBeenCalled();
-    expect(result).toEqual({ _id: "1", nom: "Maths" });
+      expect(mockMatiere.save).toHaveBeenCalledTimes(1);
+      expect(result).toEqual({ _id: "1", nom: "Mathématiques" });
+    });
   });
 
-  test("update should call Matiere.findByIdAndUpdate", async () => {
-    const updatedMatiere = { _id: "1", nom: "Français" };
-    Matiere.findByIdAndUpdate.mockResolvedValue(updatedMatiere);
+  describe("update", () => {
+    it("devrait appeler Matiere.findByIdAndUpdate()", async () => {
+      const updatedMatiere = { _id: "1", nom: "Français" };
+      Matiere.findByIdAndUpdate.mockResolvedValue(updatedMatiere);
 
-    const result = await MatiereRepository.update("1", { nom: "Français" });
+      const result = await MatiereRepository.update("1", { nom: "Français" });
 
-    expect(Matiere.findByIdAndUpdate).toHaveBeenCalledWith("1", { nom: "Français" }, { new: true });
-    expect(result).toEqual(updatedMatiere);
+      expect(Matiere.findByIdAndUpdate).toHaveBeenCalledWith(
+        "1",
+        { nom: "Français" },
+        { new: true }
+      );
+      expect(result).toEqual(updatedMatiere);
+    });
   });
 
-  test("delete should call Matiere.findByIdAndDelete", async () => {
-    const deletedMatiere = { _id: "1", nom: "Maths" };
-    Matiere.findByIdAndDelete.mockResolvedValue(deletedMatiere);
+  describe("delete", () => {
+    it("devrait appeler Matiere.findByIdAndDelete()", async () => {
+      const deletedMatiere = { _id: "1", nom: "Mathématiques" };
+      Matiere.findByIdAndDelete.mockResolvedValue(deletedMatiere);
 
-    const result = await MatiereRepository.delete("1");
+      const result = await MatiereRepository.delete("1");
 
-    expect(Matiere.findByIdAndDelete).toHaveBeenCalledWith("1");
-    expect(result).toEqual(deletedMatiere);
+      expect(Matiere.findByIdAndDelete).toHaveBeenCalledWith("1");
+      expect(result).toEqual(deletedMatiere);
+    });
   });
 });
