@@ -1,36 +1,40 @@
-const Professeur = require("../models/Professeur");
+const ProfesseurRepository = require("../repositories/professeurRepository");
 
-exports.getAll = async () => {
-  return await Professeur.find();
-};
-
-exports.getOne = async (id) => {
-  const prof = await Professeur.findById(id);
-  if (!prof) {
-    throw new Error("Professeur introuvable");
+class ProfesseurService {
+  async getAll() {
+    return await ProfesseurRepository.findAll();
   }
-  return prof;
-};
 
-exports.create = async (data) => {
-  if (!data.nom || !data.sexe) {
-    throw new Error("Les champs 'nom' et 'sexe' sont obligatoires");
+  async getById(id) {
+    const prof = await ProfesseurRepository.findById(id);
+    if (!prof) {
+      throw new Error("Professeur introuvable");
+    }
+    return prof;
   }
-  return await Professeur.create(data);
-};
 
-exports.update = async (id, data) => {
-  const updated = await Professeur.findByIdAndUpdate(id, data, { new: true });
-  if (!updated) {
-    throw new Error("Impossible de mettre à jour ce professeur");
+  async create(data) {
+    if (!data.nom || !data.sexe) {
+      throw new Error("Les champs 'nom' et 'sexe' sont obligatoires");
+    }
+    return await ProfesseurRepository.create(data);
   }
-  return updated;
-};
 
-exports.remove = async (id) => {
-  const deleted = await Professeur.findByIdAndDelete(id);
-  if (!deleted) {
-    throw new Error("Impossible de supprimer ce professeur");
+  async update(id, data) {
+    const updated = await ProfesseurRepository.update(id, data);
+    if (!updated) {
+      throw new Error("Impossible de mettre à jour ce professeur");
+    }
+    return updated;
   }
-  return deleted;
-};
+
+  async delete(id) {
+    const deleted = await ProfesseurRepository.remove(id);
+    if (!deleted) {
+      throw new Error("Impossible de supprimer ce professeur");
+    }
+    return deleted;
+  }
+}
+
+module.exports = new ProfesseurService();

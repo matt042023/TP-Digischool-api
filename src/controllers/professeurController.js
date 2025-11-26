@@ -11,7 +11,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   try {
-    const prof = await professeurService.getOne(req.params.id);
+    const prof = await professeurService.getById(req.params.id);
     res.json(prof);
   } catch (e) {
     res.status(404).json({ message: e.message });
@@ -38,7 +38,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    await professeurService.remove(req.params.id);
+    await professeurService.delete(req.params.id);
     res.json({ message: "Professeur supprimé avec succès" });
   } catch (e) {
     res.status(404).json({ message: e.message });
