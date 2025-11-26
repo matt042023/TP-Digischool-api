@@ -9,6 +9,9 @@ exports.getNoteById = (id) => {
 };
 
 exports.createNote = (data) => {
+  if (data.note && (data.note < 0 || data.note > 20)) {
+    throw new Error('La note doit être comprise entre 0 et 20');
+  }
   return notesRepository.create(data);
 };
 

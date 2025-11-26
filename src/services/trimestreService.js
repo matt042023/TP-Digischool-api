@@ -9,15 +9,15 @@ exports.getTrimestreById = (id) => {
 };
 
 exports.createTrimestre = (data) => {
-  if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
-    throw new Error('La date de début doit être avant la date de fin');
+  if (!data.date || !data.nom) {
+    throw new Error('La date et/ou le nom sont obligatoires'); 
   }
   return trimestreRepository.create(data);
 };
 
 exports.updateTrimestre = (id, data) => {
-  if (data.date_debut && data.date_fin && data.date_debut > data.date_fin) {
-    throw new Error('La date de début doit être avant la date de fin');
+  if (!data.date || !data.nom) {
+    throw new Error('La date et/ou le nom sont obligatoires');
   }
   return trimestreRepository.update(id, data);
 };
