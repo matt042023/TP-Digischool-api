@@ -1,4 +1,4 @@
-MediaSourceHandle.exports = {
-  testEnvironnement: "node",
+module.exports = {
+  testEnvironment: "node",
   testMatch: ["**/tests/**/*.test.js"],
 };

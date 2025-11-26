@@ -27,6 +27,10 @@ app.use("/trimestres", trimestreRoutes);
 app.get("/", (req, res) => res.send("API Digischool  + MongoDB"));
 
 // Lancement du serveur
-app.listen(PORT, () =>
-  console.log(`Serveur démarré sur http://localhost:${PORT}`)
-);
+if (require.main === module) {
+  app.listen(PORT, () =>
+    console.log(`Serveur démarré sur http://localhost:${PORT}`)
+  );
+}
+
+module.exports = app;
