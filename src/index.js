@@ -12,6 +12,22 @@ const app = express();
 connectDB();
 const PORT = 3000;
 
+// Sécurité
+const helmet = require("helmet");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
+
+app.use(helmet());
+app.use(cors());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limite chaque IP à 100 requêtes par fenêtre
+  standardHeaders: true, // Retourne les infos de limite dans les headers `RateLimit-*`
+  legacyHeaders: false, // Désactive les headers `X-RateLimit-*`
+});
+app.use(limiter);
+
 // Middleware pour parser le JSON
 app.use(express.json());
 
