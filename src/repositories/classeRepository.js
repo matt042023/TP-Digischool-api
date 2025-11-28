@@ -26,6 +26,11 @@ class ClasseRepository {
   async delete(id) {
     return await Classe.findByIdAndDelete(id);
   }
+
+  // Récupérer une classe par l'ID du professeur
+  async findByProfesseur(profId) {
+    return await Classe.findOne({ prof: profId }).populate("prof");
+  }
 }
 
 module.exports = new ClasseRepository();

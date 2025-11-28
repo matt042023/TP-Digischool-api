@@ -1,7 +1,16 @@
 const ProfesseurRepository = require("../repositories/professeurRepository");
+const ClasseRepository = require("../repositories/classeRepository");
 
 class ProfesseurService {
-  async getAll() {
+  async getAll(classeId = null) {
+    if (classeId) {
+      const classe = await ClasseRepository.getById(classeId);
+      if (!classe) {
+        throw new Error("Classe introuvable");
+      }
+      const professeur = await ProfesseurRepository.findById(classe.prof);
+      return professeur ? [professeur] : [];
+    }
     return await ProfesseurRepository.findAll();
   }
 

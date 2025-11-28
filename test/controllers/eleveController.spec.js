@@ -22,7 +22,34 @@ describe("EleveController", () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockEleves);
-      expect(eleveService.getAll).toHaveBeenCalledTimes(1);
+      expect(eleveService.getAll).toHaveBeenCalledWith(false);
+    });
+
+    it("devrait retourner les eleves groupés par classe avec status 200", async () => {
+      const mockElevesGrouped = [
+        {
+          classeId: "classId1",
+          classeNom: "CP",
+          total: 2,
+          eleves: [
+            { _id: "1", nom: "Dupont", sexe: "M" },
+            { _id: "2", nom: "Martin", sexe: "F" },
+          ],
+        },
+        {
+          classeId: "classId2",
+          classeNom: "CE1",
+          total: 1,
+          eleves: [{ _id: "3", nom: "Durand", sexe: "M" }],
+        },
+      ];
+      eleveService.getAll.mockResolvedValue(mockElevesGrouped);
+
+      const response = await request(app).get("/eleves?groupByClasse=true");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockElevesGrouped);
+      expect(eleveService.getAll).toHaveBeenCalledWith(true);
     });
 
     it("devrait retourner status 500 en cas d'erreur", async () => {

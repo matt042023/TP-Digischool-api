@@ -1,7 +1,10 @@
 const EleveRepository = require("../repositories/eleveRepository");
 
 class EleveService {
-  async getAll() {
+  async getAll(groupByClasse = false) {
+    if (groupByClasse) {
+      return await EleveRepository.findAllGroupedByClasse();
+    }
     return await EleveRepository.findAll();
   }
 

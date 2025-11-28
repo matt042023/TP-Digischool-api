@@ -7,6 +7,7 @@ jest.mock("../../src/models/Eleve.js", () => ({
   create: jest.fn(),
   findByIdAndUpdate: jest.fn(),
   findByIdAndDelete: jest.fn(),
+  aggregate: jest.fn(),
 }));
 
 describe("EleveRepository", () => {
@@ -79,6 +80,37 @@ describe("EleveRepository", () => {
 
       expect(Eleve.findByIdAndDelete).toHaveBeenCalledWith("1");
       expect(result).toEqual(deletedEleve);
+    });
+  });
+
+  describe("findAllGroupedByClasse", () => {
+    it("devrait appeler Eleve.aggregate() avec le bon pipeline", async () => {
+      const mockElevesGrouped = [
+        {
+          classeId: "classId1",
+          classeNom: "CP",
+          total: 2,
+          eleves: [
+            { _id: "1", nom: "Dupont", sexe: "M" },
+            { _id: "2", nom: "Martin", sexe: "F" },
+          ],
+        },
+      ];
+      Eleve.aggregate.mockResolvedValue(mockElevesGrouped);
+
+      const result = await eleveRepository.findAllGroupedByClasse();
+
+      expect(Eleve.aggregate).toHaveBeenCalledTimes(1);
+      expect(Eleve.aggregate).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({ $lookup: expect.any(Object) }),
+          expect.objectContaining({ $unwind: expect.any(String) }),
+          expect.objectContaining({ $group: expect.any(Object) }),
+          expect.objectContaining({ $project: expect.any(Object) }),
+          expect.objectContaining({ $sort: expect.any(Object) }),
+        ])
+      );
+      expect(result).toEqual(mockElevesGrouped);
     });
   });
 });
