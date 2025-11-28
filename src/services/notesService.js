@@ -27,15 +27,9 @@ exports.deleteNote = (id) => {
 };
 
 exports.getNotesByProfesseur = (professeurId) => {
-  if (!professeurId) {
-    throw new Error('L\'ID du professeur est requis');
-  }
   return notesRepository.findByProfesseur(professeurId);
 };
 
 exports.getNotesByTrimestreAndClasse = (trimestreId, classeId) => {
-  if (!trimestreId || !classeId) {
-    throw new Error('L\'ID du trimestre et de la classe sont requis');
-  }
   return notesRepository.findByTrimestreAndClasse(trimestreId, classeId);
 };

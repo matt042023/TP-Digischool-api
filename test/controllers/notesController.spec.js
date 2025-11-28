@@ -134,4 +134,38 @@ describe("NotesController", () => {
       expect(response.body.error).toBe("Erreur serveur");
     });
   });
+
+  describe('GET /notes/professeur/:professeurId', () => {
+    it('devrait retourner les éléves et leurs notes selon un professeur avec status 200', async () => {
+      const mockNotes = [
+        { _id: "1", valeur: 15, eleveId: "e1", matiereId: "m1" },
+        { _id: "2", valeur: 12, eleveId: "e2", matiereId: "m1" },
+      ];
+
+      notesService.getNotesByProfesseur.mockResolvedValue(mockNotes);
+
+      const response = await request(app).get('/notes/professeur/1');
+
+      expect(response.status).toBe(200);
+      expect(notesService.getNotesByProfesseur).toHaveBeenCalledWith("1");
+      expect(response.body).toEqual(mockNotes);
+    })
+  })
+
+  describe('GET /notes/trimestre/:idTrimestre/classe/:idClasse', () => {
+    it('devrait retourner les notes des élèves par matière avec le nom du professeur selon le trimestre et la classe avec status 200', async () => {
+      const mockNotes = [
+        { _id: "1", valeur: 15, eleveId: "e1", matiereId: "m1" },
+        { _id: "2", valeur: 12, eleveId: "e2", matiereId: "m1" },
+      ];
+
+      notesService.getNotesByTrimestreAndClasse.mockResolvedValue(mockNotes);
+
+      const response = await request(app).get('/notes/trimestre/1/classe/2');
+
+      expect(response.status).toBe(200);
+      expect(notesService.getNotesByTrimestreAndClasse).toHaveBeenCalledWith("1", "2");
+      expect(response.body).toEqual(mockNotes);
+    })
+  })
 });
