@@ -44,3 +44,17 @@ exports.deleteNote = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getNotesByEleve = async (req, res) => {
+  try {
+    const notes = await notesService.getNotesByEleve(req.params.eleveId);
+
+    if (!notes || notes.length === 0) {
+      return res.status(404).json({ message: "Aucune note trouvée pour cet élève" });
+    }
+
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

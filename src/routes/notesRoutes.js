@@ -115,4 +115,80 @@ router.put('/:id', notesController.updateNote);
  */
 router.delete('/:id', notesController.deleteNote);
 
+/**
+ * @swagger
+ * /notes/eleve/{eleveId}:
+ *   get:
+ *     summary: Récupère toutes les notes d'un élève
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: path
+ *         name: eleveId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de l'élève dont on souhaite récupérer les notes
+ *     responses:
+ *       200:
+ *         description: Liste des notes de l'élève
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   note:
+ *                     type: number
+ *                   avis:
+ *                     type: string
+ *                   avancement:
+ *                     type: number
+ *                   idEleve:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       nom:
+ *                         type: string
+ *                       prenom:
+ *                         type: string
+ *                   idMatiere:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       nom:
+ *                         type: string
+ *                   idProf:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       nom:
+ *                         type: string
+ *                   idClasse:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       nom:
+ *                         type: string
+ *                   idTrimestre:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       nom:
+ *                         type: string
+ *                   dateSaisie:
+ *                     type: string
+ *                     format: date-time
+ *       404:
+ *         description: Aucune note trouvée pour cet élève
+ */
+router.get("/eleve/:eleveId", notesController.getNotesByEleve);
+
 module.exports = router;

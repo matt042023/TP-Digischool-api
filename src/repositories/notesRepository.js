@@ -19,3 +19,12 @@ exports.update = (id, data) => {
 exports.delete = (id) => {
   return notesRepository.findByIdAndDelete(id);
 }
+
+exports.findByEleve = (eleveId) => {
+  return notesRepository.find({ idEleve: eleveId })
+    .populate({
+      path: 'idMatiere',     // on populera la matière
+      select: 'nom -_id'     // ne récupérer que le nom de la matière, pas l'_id
+    })
+    .select('idMatiere note avis')  // récupére que ces champs dans Notes
+};

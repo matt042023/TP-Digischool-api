@@ -10,3 +10,9 @@ exports.update = (id, data) =>
   eleves.findByIdAndUpdate(id, data, { new: true });
 
 exports.remove = (id) => eleves.findByIdAndDelete(id);
+
+exports.findByClasse = (classeId) => {
+  return eleves
+    .find({ classe: classeId })
+    .select('nom prenom')  // récupère que le nom et le prénom
+};

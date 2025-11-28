@@ -25,3 +25,7 @@ exports.updateNote = (id, data) => {
 exports.deleteNote = (id) => {
   return notesRepository.delete(id);
 };
+
+exports.getNotesByEleve = (eleveId) => {
+  return notesRepository.findByEleve(eleveId);
+};

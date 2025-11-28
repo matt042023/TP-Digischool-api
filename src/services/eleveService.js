@@ -35,6 +35,12 @@ class EleveService {
     }
     return deleted;
   }
+
+  async getByClasse(classeId) {
+  const result = await EleveRepository.findByClasse(classeId);
+  return result; // tableau vide possible -> pas d'exception
+}
+
 }
 
 module.exports = new EleveService();
