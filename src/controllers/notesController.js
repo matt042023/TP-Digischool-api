@@ -44,3 +44,22 @@ exports.deleteNote = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getNotesByProfesseur = async (req, res) => {
+  try {
+    const notes = await notesService.getNotesByProfesseur(req.params.professeurId);
+    res.json(notes);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getNotesByTrimestreAndClasse = async (req, res) => {
+  try {
+    const { idTrimestre, idClasse } = req.params;
+    const notes = await notesService.getNotesByTrimestreAndClasse(idTrimestre, idClasse);
+    res.json(notes);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
