@@ -1,12 +1,18 @@
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/db");
+
+//import des routes
 const classeRoutes = require("./routes/classeRoutes.js");
 const matiereRoutes = require("./routes/matiereRoutes.js");
 const eleveRoutes = require("./routes/eleveRoutes.js");
 const professeurRoutes = require("./routes/professeurRoutes.js");
 const notesRoutes = require("./routes/notesRoutes.js");
 const trimestreRoutes = require("./routes/trimestreRoutes.js");
+
+//import Swagger
+const { swaggerUi, specs } = require("./config/swagger");
+
 
 const app = express();
 connectDB();
@@ -30,6 +36,9 @@ app.use(limiter);
 
 // Middleware pour parser le JSON
 app.use(express.json());
+
+//ajout Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes
 app.use("/classes", classeRoutes);
