@@ -4,13 +4,29 @@ const ClasseController = require("../controllers/classeController.js");
 const router = express.Router();
 
 /**
- * @swagger
- * tags:
- *   name: Classes
- *   description: Gestion des classes
+ * Routes pour la gestion des classes.
+ * @module routes/classeRoutes
  */
 
 /**
+ * @typedef {object} ExpressRequest
+ * @description Objet représentant la requête Express
+ */
+
+/**
+ * @typedef {object} ExpressResponse
+ * @description Objet représentant la réponse Express
+ */
+
+/**
+ * Récupère la liste de toutes les classes.
+ * @name GET /classes
+ * @function
+ * @memberof module:routes/classeRoutes
+ * @param {ExpressRequest} req - Requête Express
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /classes:
  *   get:
@@ -36,6 +52,14 @@ const router = express.Router();
 router.get("/", ClasseController.getAll);
 
 /**
+ * Récupère une classe par son ID.
+ * @name GET /classes/:id
+ * @function
+ * @memberof module:routes/classeRoutes
+ * @param {ExpressRequest} req - Requête Express contenant l'ID (params.id)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /classes/{id}:
  *   get:
@@ -66,6 +90,14 @@ router.get("/", ClasseController.getAll);
 router.get("/:id", ClasseController.getById);
 
 /**
+ * Crée une nouvelle classe.
+ * @name POST /classes
+ * @function
+ * @memberof module:routes/classeRoutes
+ * @param {ExpressRequest} req - Requête Express contenant les données de la classe (body)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /classes:
  *   post:
@@ -90,6 +122,14 @@ router.get("/:id", ClasseController.getById);
 router.post("/", ClasseController.create);
 
 /**
+ * Met à jour une classe par son ID.
+ * @name PUT /classes/:id
+ * @function
+ * @memberof module:routes/classeRoutes
+ * @param {ExpressRequest} req - Requête Express contenant (params.id + body)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /classes/{id}:
  *   put:
@@ -120,6 +160,14 @@ router.post("/", ClasseController.create);
 router.put("/:id", ClasseController.update);
 
 /**
+ * Supprime une classe par son ID.
+ * @name DELETE /classes/:id
+ * @function
+ * @memberof module:routes/classeRoutes
+ * @param {ExpressRequest} req - Requête Express contenant l'ID (params.id)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /classes/{id}:
  *   delete:

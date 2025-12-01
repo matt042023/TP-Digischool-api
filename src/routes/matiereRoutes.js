@@ -4,13 +4,29 @@ const MatiereController = require("../controllers/matiereController.js");
 const router = express.Router();
 
 /**
- * @swagger
- * tags:
- *   name: Matieres
- *   description: Gestion des matières
+ * Routes pour la gestion des matières.
+ * @module routes/matiereRoutes
  */
 
 /**
+ * @typedef {object} ExpressRequest
+ * @description Objet représentant la requête Express
+ */
+
+/**
+ * @typedef {object} ExpressResponse
+ * @description Objet représentant la réponse Express
+ */
+
+/**
+ * Récupère toutes les matières.
+ * @name GET /matieres
+ * @function
+ * @memberof module:routes/matiereRoutes
+ * @param {ExpressRequest} req - Requête Express
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /matieres:
  *   get:
@@ -34,6 +50,14 @@ const router = express.Router();
 router.get("/", MatiereController.getAll);
 
 /**
+ * Récupère une matière par son ID.
+ * @name GET /matieres/:id
+ * @function
+ * @memberof module:routes/matiereRoutes
+ * @param {ExpressRequest} req - Requête Express contenant l'ID (params.id)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /matieres/{id}:
  *   get:
@@ -54,6 +78,14 @@ router.get("/", MatiereController.getAll);
 router.get("/:id", MatiereController.getById);
 
 /**
+ * Crée une nouvelle matière.
+ * @name POST /matieres
+ * @function
+ * @memberof module:routes/matiereRoutes
+ * @param {ExpressRequest} req - Requête Express contenant les données de la matière (body)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /matieres:
  *   post:
@@ -77,6 +109,14 @@ router.get("/:id", MatiereController.getById);
 router.post("/", MatiereController.create);
 
 /**
+ * Met à jour une matière par son ID.
+ * @name PUT /matieres/:id
+ * @function
+ * @memberof module:routes/matiereRoutes
+ * @param {ExpressRequest} req - Requête Express contenant (params.id + body)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /matieres/{id}:
  *   put:
@@ -106,6 +146,14 @@ router.post("/", MatiereController.create);
 router.put("/:id", MatiereController.update);
 
 /**
+ * Supprime une matière par son ID.
+ * @name DELETE /matieres/:id
+ * @function
+ * @memberof module:routes/matiereRoutes
+ * @param {ExpressRequest} req - Requête Express contenant l'ID (params.id)
+ * @param {ExpressResponse} res - Réponse Express
+ * @returns {Promise<void>}
+ *
  * @swagger
  * /matieres/{id}:
  *   delete:

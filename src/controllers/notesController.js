@@ -1,5 +1,13 @@
 const notesService = require("../services/notesService");
 
+/**
+ * Crée une nouvelle note
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} req.body - Corps de la requête contenant les données de la note
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} Renvoie la note créée avec le statut 201 ou une erreur 500
+ */
 exports.createNote = async (req, res) => {
   try {
     const note = await notesService.createNote(req.body);
@@ -9,6 +17,13 @@ exports.createNote = async (req, res) => {
   }
 };
 
+/**
+ * Récupère toutes les notes
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} Renvoie la liste de toutes les notes ou une erreur 500
+ */
 exports.getAllNotes = async (req, res) => {
   try {
     const notes = await notesService.getAllNotes();
@@ -18,6 +33,14 @@ exports.getAllNotes = async (req, res) => {
   }
 };
 
+/**
+ * Récupère une note par son identifiant
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {string} req.params.id - Identifiant de la note
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} Renvoie la note trouvée ou une erreur 500
+ */
 exports.getNoteById = async (req, res) => {
   try {
     const note = await notesService.getNoteById(req.params.id);
@@ -27,6 +50,15 @@ exports.getNoteById = async (req, res) => {
   }
 };
 
+/**
+ * Met à jour une note existante
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {string} req.params.id - Identifiant de la note à modifier
+ * @param {Object} req.body - Corps de la requête contenant les nouvelles données
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} Renvoie la note mise à jour ou une erreur 500
+ */
 exports.updateNote = async (req, res) => {
   try {
     const note = await notesService.updateNote(req.params.id, req.body);
@@ -36,6 +68,14 @@ exports.updateNote = async (req, res) => {
   }
 };
 
+/**
+ * Supprime une note
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {string} req.params.id - Identifiant de la note à supprimer
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} Renvoie un message de confirmation ou une erreur 500
+ */
 exports.deleteNote = async (req, res) => {
   try {
     await notesService.deleteNote(req.params.id);
@@ -46,6 +86,14 @@ exports.deleteNote = async (req, res) => {
 };
 
 
+/**
+ * Récupère les notes d'un professeur avec les informations des élèves
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {string} req.params.professeurId - Identifiant du professeur
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} Renvoie la liste des notes du professeur ou une erreur 400
+ */
 exports.getNotesByProfesseur = async (req, res) => {
   try {
     const notes = await notesService.getNotesByProfesseur(req.params.professeurId);
@@ -55,6 +103,15 @@ exports.getNotesByProfesseur = async (req, res) => {
   }
 };
 
+/**
+ * Récupère les notes par trimestre et classe avec les informations des élèves, matières et professeurs
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {string} req.params.idTrimestre - Identifiant du trimestre
+ * @param {string} req.params.idClasse - Identifiant de la classe
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} Renvoie la liste des notes filtrées ou une erreur 400
+ */
 exports.getNotesByTrimestreAndClasse = async (req, res) => {
   try {
     const { idTrimestre, idClasse } = req.params;
