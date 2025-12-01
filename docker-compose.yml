@@ -4,10 +4,11 @@ services:
   api:
     build: .
     ports:
-      - "3000:3000"
+      - "${PORT:-3000}:${PORT:-3000}"
+    env_file:
+      - .env
     environment:
       - MONGO_URI=mongodb://mongo:27017/digischools
-      - PORT=3000
     depends_on:
       - mongo
     restart: on-failure
