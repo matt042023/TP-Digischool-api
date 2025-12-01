@@ -149,4 +149,25 @@ router.put("/:id", controller.update);
  */
 router.delete("/:id", controller.remove);
 
+/**
+ * @swagger
+ * /eleves/classe/{classeId}:
+ *   get:
+ *     summary: Récupère tous les élèves d'une classe
+ *     tags: [Eleves]
+ *     parameters:
+ *       - in: path
+ *         name: classeId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la classe
+ *     responses:
+ *       200:
+ *         description: Liste d'élèves selon le choix d'une classe
+ *       404:
+ *         description: Aucun élève trouvé pour cette classe
+ */
+router.get("/classe/:classeId", controller.getByClasse);
+
 module.exports = router;

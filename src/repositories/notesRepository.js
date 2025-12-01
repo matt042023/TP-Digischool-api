@@ -20,6 +20,7 @@ exports.delete = (id) => {
   return notesRepository.findByIdAndDelete(id);
 }
 
+
 exports.findByProfesseur = (professeurId) => {
   return notesRepository.find({ idProf: professeurId })
     .populate('idEleve', 'nom prenom')
@@ -40,3 +41,13 @@ exports.findByTrimestreAndClasse = (trimestreId, classeId) => {
     .populate('idTrimestre', 'nom')
     .populate('idProf', 'nom prenom');
 }
+
+exports.findByEleve = (eleveId) => {
+  return notesRepository.find({ idEleve: eleveId })
+    .populate({
+      path: 'idMatiere',     // on populera la matière
+      select: 'nom -_id'     // ne récupérer que le nom de la matière, pas l'_id
+    })
+    .select('idMatiere note avis')  // récupére que ces champs dans Notes
+};
+

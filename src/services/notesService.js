@@ -26,6 +26,7 @@ exports.deleteNote = (id) => {
   return notesRepository.delete(id);
 };
 
+
 exports.getNotesByProfesseur = (professeurId) => {
   return notesRepository.findByProfesseur(professeurId);
 };
@@ -33,3 +34,8 @@ exports.getNotesByProfesseur = (professeurId) => {
 exports.getNotesByTrimestreAndClasse = (trimestreId, classeId) => {
   return notesRepository.findByTrimestreAndClasse(trimestreId, classeId);
 };
+
+exports.getNotesByEleve = (eleveId) => {
+  return notesRepository.findByEleve(eleveId);
+};
+
