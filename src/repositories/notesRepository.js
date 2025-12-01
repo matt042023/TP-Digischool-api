@@ -19,3 +19,24 @@ exports.update = (id, data) => {
 exports.delete = (id) => {
   return notesRepository.findByIdAndDelete(id);
 }
+
+exports.findByProfesseur = (professeurId) => {
+  return notesRepository.find({ idProf: professeurId })
+    .populate('idEleve', 'nom prenom')
+    .populate('idMatiere', 'nom')
+    .populate('idClasse', 'nom')
+    .populate('idTrimestre', 'nom')
+    .populate('idProf', 'nom prenom');
+}
+
+exports.findByTrimestreAndClasse = (trimestreId, classeId) => {
+  return notesRepository.find({
+    idTrimestre: trimestreId,
+    idClasse: classeId
+  })
+    .populate('idEleve', 'nom prenom')
+    .populate('idMatiere', 'nom')
+    .populate('idClasse', 'nom')
+    .populate('idTrimestre', 'nom')
+    .populate('idProf', 'nom prenom');
+}

@@ -2,11 +2,15 @@ const Notes = require("../../src/models/Notes");
 const notesRepository = require("../../src/repositories/notesRepository");
 
 jest.mock("../../src/models/Notes", () => ({
-  find: jest.fn(),
+  find: jest.fn(() => ({
+    populate: jest.fn(() => ({
+      populate: jest.fn(() => Promise.resolve([]))
+    }))
+  })),
   findById: jest.fn(),
   create: jest.fn(),
   findByIdAndUpdate: jest.fn(),
-  findByIdAndDelete: jest.fn(),
+  findByIdAndDelete: jest.fn()
 }));
 
 describe("NotesRepository", () => {
@@ -121,4 +125,68 @@ describe("NotesRepository", () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  describe("findByProfesseur", () => {
+    it("devrait appeler Notes.find({idProf: professeurId}).populate()", async () => {
+      const mockData = [
+        {
+          _id: "1",
+          dateSaisie: new Date(),
+          idEleve: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idClasse: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idMatiere: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idTrimestre: "ObjectId('69247f0dab755a53c4af4b1b')",
+          note: 18,
+          avis: "Très bien",
+          avancement: 0,
+        },
+      ];
+
+      const mockPopulate = {
+        populate: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(mockData),
+        then: jest.fn((resolve) => resolve(mockData)),
+      }
+
+      Notes.find.mockReturnValue(mockPopulate);
+
+      const result = await notesRepository.findByProfesseur("1");
+
+      expect(Notes.find).toHaveBeenCalledWith({ idProf: "1" });
+      expect(mockPopulate.populate).toHaveBeenCalledTimes(5);
+      expect(result).toEqual(mockData);
+    })
+  })
+
+  describe("findByTrimestreAndClasse", () => {
+    it("devrait appeler Notes.find({idTrimestre: trimestreId,idClasse: classeId}).populate()", async () => {
+      const mockData = [
+        {
+          _id: "1",
+          dateSaisie: new Date(),
+          idEleve: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idClasse: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idMatiere: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idTrimestre: "ObjectId('69247f0dab755a53c4af4b1b')",
+          note: 18,
+          avis: "Très bien",
+          avancement: 0,
+        },
+      ];
+
+      const mockPopulate = {
+        populate: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(mockData),
+        then: jest.fn((resolve) => resolve(mockData)),
+      }
+
+      Notes.find.mockReturnValue(mockPopulate);
+
+      const result = await notesRepository.findByTrimestreAndClasse("1", "2");
+
+      expect(Notes.find).toHaveBeenCalledWith({ idTrimestre: "1", idClasse: "2" });
+      expect(mockPopulate.populate).toHaveBeenCalledTimes(5);
+      expect(result).toEqual(mockData);
+    })
+  })
 });

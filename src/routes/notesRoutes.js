@@ -115,4 +115,52 @@ router.put('/:id', notesController.updateNote);
  */
 router.delete('/:id', notesController.deleteNote);
 
+/**
+ * @swagger
+ * /notes/professeur/{professeurId}:
+ *   get:
+ *     summary: Récupère les élèves et leurs notes selon un professeur
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: path
+ *         name: professeurId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID du professeur
+ *     responses:
+ *       200:
+ *         description: Liste des notes avec les informations des élèves
+ *       400:
+ *         description: Paramètres invalides
+ */
+router.get('/professeur/:professeurId', notesController.getNotesByProfesseur);
+
+/**
+ * @swagger
+ * /notes/trimestre/{idTrimestre}/classe/{idClasse}:
+ *   get:
+ *     summary: Récupère les notes des élèves par matière avec le nom du professeur selon le trimestre et la classe
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: path
+ *         name: idTrimestre
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID du trimestre
+ *       - in: path
+ *         name: idClasse
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la classe
+ *     responses:
+ *       200:
+ *         description: Liste des notes avec les informations des élèves, matières et professeurs
+ *       400:
+ *         description: Paramètres invalides
+ */
+router.get('/trimestre/:idTrimestre/classe/:idClasse', notesController.getNotesByTrimestreAndClasse);
+
 module.exports = router;

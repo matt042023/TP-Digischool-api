@@ -162,4 +162,54 @@ describe("NotesService", () => {
       expect(result).toEqual(mockNote);
     });
   });
+
+  describe("getNotesByProfesseur", () => {
+    it("devrait renvoyer les éléves et notes d'un professeur", async () => {
+      const mockData = [
+        {
+          _id: "1",
+          dateSaisie: new Date(),
+          idEleve: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idClasse: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idMatiere: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idTrimestre: "ObjectId('69247f0dab755a53c4af4b1b')",
+          note: 18,
+          avis: "Très bien",
+          avancement: 0,
+        },
+      ]
+
+      notesRepository.findByProfesseur.mockResolvedValue(mockData);
+
+      const result = await notesService.getNotesByProfesseur("1");
+
+      expect(notesRepository.findByProfesseur).toHaveBeenCalledWith("1");
+      expect(result).toEqual(mockData);
+    })
+  })
+
+  describe("getNotesByTrimestreAndClasse", () => {
+    it("devrait renvoyer les notes des éléves par matière avec le nom du professeur selon un trimestre et une classe", async () => {
+      const mockData = [
+        {
+          _id: "1",
+          dateSaisie: new Date(),
+          idEleve: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idClasse: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idMatiere: "ObjectId('69247f0dab755a53c4af4b1b')",
+          idTrimestre: "ObjectId('69247f0dab755a53c4af4b1b')",
+          note: 18,
+          avis: "Très bien",
+          avancement: 0,
+        },
+      ]
+
+      notesRepository.findByTrimestreAndClasse.mockResolvedValue(mockData);
+
+      const result = await notesService.getNotesByTrimestreAndClasse("1", "2");
+
+      expect(notesRepository.findByTrimestreAndClasse).toHaveBeenCalledWith("1", "2");
+      expect(result).toEqual(mockData);
+    })
+  })
 });
