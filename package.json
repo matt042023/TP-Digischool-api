@@ -11,7 +11,8 @@
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "seed": "node src/scripts/seed.js",
-    "import": "node src/scripts/importFromSQL"
+    "import": "node src/scripts/importFromSQL",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,8 @@
   },
   "devDependencies": {
     "jest": "^30.2.0",
+    "jsdoc": "^4.0.5",
+    "minami": "^1.2.3",
     "nodemon": "^3.1.11",
     "supertest": "^7.1.4"
   }
