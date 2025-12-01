@@ -12,6 +12,7 @@ API REST pour la gestion des **classes** et **matières** d’un établissement 
 - [Lancement du serveur](#lancement-du-serveur)  
 - [Documentation API](#documentation-api)  
 - [JSDOC](#jsdoc)
+- [Docker](#docker)
 - [Structure du projet](#structure-du-projet)  
 - [Contributeurs](#contributeurs)  
 
@@ -74,6 +75,14 @@ La documentation du code peut être générée avec JSDoc :
 npm run doc
 ```
 La documentation HTML sera générée dans le dossier docs/.
+
+## Docker
+
+Pour lancer le serveur avec Docker :
+```bash
+docker-compose up
+```
+La BDD est automatiquement remplie grâce au script de seed.
 
 ## Structure du projet
 
