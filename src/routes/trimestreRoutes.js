@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Routes pour la gestion des trimestres
+ * @module routes/trimestreRoutes
+ */
+
 const express = require('express');
 const router = express.Router();
 const trimestreController = require('../controllers/trimestreController');
