@@ -153,4 +153,32 @@ describe("EleveController", () => {
       expect(response.body.message).toContain("Impossible");
     });
   });
+
+  describe("GET /eleves/classe/:classeId", () => {
+  it("devrait retourner la liste des élèves d'une classe avec status 200", async () => {
+    const classeId = "classId1";
+    const mockElevesClasse = [
+      { _id: "1", nom: "Dupont", prenom: "Jean", classe: classeId },
+      { _id: "2", nom: "Martin", prenom: "Julie", classe: classeId },
+    ];
+    eleveService.getByClasse = jest.fn().mockResolvedValue(mockElevesClasse);
+
+    const response = await request(app).get(`/eleves/classe/${classeId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockElevesClasse);
+    expect(eleveService.getByClasse).toHaveBeenCalledWith(classeId);
+  });
+
+  it("devrait retourner status 500 en cas d'erreur", async () => {
+    const classeId = "classId1";
+    eleveService.getByClasse = jest.fn().mockRejectedValue(new Error("Erreur serveur"));
+
+    const response = await request(app).get(`/eleves/classe/${classeId}`);
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Erreur serveur");
+  });
+});
+
 });

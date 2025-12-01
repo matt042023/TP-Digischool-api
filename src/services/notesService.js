@@ -55,6 +55,7 @@ exports.deleteNote = (id) => {
   return notesRepository.delete(id);
 };
 
+
 /**
  * Récupère les notes d'un professeur avec les informations liées
  * @param {string} professeurId - Identifiant du professeur
@@ -73,3 +74,8 @@ exports.getNotesByProfesseur = (professeurId) => {
 exports.getNotesByTrimestreAndClasse = (trimestreId, classeId) => {
   return notesRepository.findByTrimestreAndClasse(trimestreId, classeId);
 };
+
+exports.getNotesByEleve = (eleveId) => {
+  return notesRepository.findByEleve(eleveId);
+};
+

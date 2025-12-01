@@ -85,6 +85,7 @@ exports.deleteNote = async (req, res) => {
   }
 };
 
+
 /**
  * Récupère les notes d'un professeur avec les informations des élèves
  * @async
@@ -118,5 +119,17 @@ exports.getNotesByTrimestreAndClasse = async (req, res) => {
     res.json(notes);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+}
+exports.getNotesByEleve = async (req, res) => {
+  try {
+    const notes = await notesService.getNotesByEleve(req.params.eleveId);
+
+    if (!notes || notes.length === 0) {
+      return res.status(404).json({ message: "Aucune note trouvée pour cet élève" });
+    }
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

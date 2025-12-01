@@ -135,6 +135,7 @@ describe("NotesController", () => {
     });
   });
 
+
   describe('GET /notes/professeur/:professeurId', () => {
     it('devrait retourner les éléves et leurs notes selon un professeur avec status 200', async () => {
       const mockNotes = [
@@ -168,4 +169,33 @@ describe("NotesController", () => {
       expect(response.body).toEqual(mockNotes);
     })
   })
+
+  describe("GET /notes/eleve/:eleveId", () => {
+  it("devrait retourner les notes d'un élève avec status 200", async () => {
+    const eleveId = "e1";
+    const mockNotesEleve = [
+      { _id: "n1", matiere: "Maths", note: 15, avis: "Bien" },
+      { _id: "n2", matiere: "Français", note: 12, avis: "Peut mieux faire" },
+    ];
+    notesService.getNotesByEleve = jest.fn().mockResolvedValue(mockNotesEleve);
+
+    const response = await request(app).get(`/notes/eleve/${eleveId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockNotesEleve);
+    expect(notesService.getNotesByEleve).toHaveBeenCalledWith(eleveId);
+  });
+
+  it("devrait retourner status 500 en cas d'erreur", async () => {
+    const eleveId = "e1";
+    notesService.getNotesByEleve = jest.fn().mockRejectedValue(new Error("Erreur serveur"));
+
+    const response = await request(app).get(`/notes/eleve/${eleveId}`);
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe("Erreur serveur");
+  });
+});
+
+
 });
