@@ -1,12 +1,28 @@
+/**
+ * Modèle Mongoose représentant une matière scolaire.
+ * @module models/Matiere
+ */
+
 const mongoose = require("mongoose");
 
-//schéma de la classe
+/**
+ * Schéma Mongoose représentant une matière.
+ * @typedef {Object} Matiere
+ * @property {string} nom - Nom de la matière (obligatoire).
+ */
 const matiereSchema = new mongoose.Schema({
-    nom: { type: String, required: true} //nom de la matière, obligatoire
+  /**
+   * Nom de la matière.
+   * @type {String}
+   * @required
+   */
+  nom: { type: String, required: true }
 });
 
-// Création du modèle
+/**
+ * Modèle Mongoose permettant d'interagir avec les matières dans MongoDB.
+ * @type {mongoose.Model<Matiere>}
+ */
 const Matiere = mongoose.model("Matiere", matiereSchema);
 
-// Export du modèle
 module.exports = Matiere;
