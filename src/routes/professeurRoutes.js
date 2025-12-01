@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Routes Express pour la gestion des professeurs
+ * @module routes/professeurRoutes
+ * @description Définit tous les endpoints de l'API pour les opérations CRUD sur les professeurs
+ * et inclut la documentation Swagger pour chaque route
+ */
+
 const router = require("express").Router();
 const controller = require("../controllers/professeurController");
 

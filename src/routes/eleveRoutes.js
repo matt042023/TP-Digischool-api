@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Routes Express pour la gestion des élèves
+ * @module routes/eleveRoutes
+ * @description Définit tous les endpoints de l'API pour les opérations CRUD sur les élèves
+ * et inclut la documentation Swagger pour chaque route
+ */
+
 const router = require("express").Router();
 const controller = require("../controllers/eleveController");
 
