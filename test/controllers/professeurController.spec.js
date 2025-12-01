@@ -22,7 +22,27 @@ describe("ProfesseurController", () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockProfesseurs);
-      expect(professeurService.getAll).toHaveBeenCalledTimes(1);
+      expect(professeurService.getAll).toHaveBeenCalledWith(undefined);
+    });
+
+    it("devrait retourner le professeur d'une classe avec status 200", async () => {
+      const mockProfesseur = [{ _id: "1", nom: "Leroy", sexe: "M" }];
+      professeurService.getAll.mockResolvedValue(mockProfesseur);
+
+      const response = await request(app).get("/professeurs?classe=classId1");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockProfesseur);
+      expect(professeurService.getAll).toHaveBeenCalledWith("classId1");
+    });
+
+    it("devrait retourner status 500 si la classe n'existe pas", async () => {
+      professeurService.getAll.mockRejectedValue(new Error("Classe introuvable"));
+
+      const response = await request(app).get("/professeurs?classe=invalidId");
+
+      expect(response.status).toBe(500);
+      expect(response.body).toMatchObject({ message: "Classe introuvable" });
     });
 
     it("devrait retourner status 500 en cas d'erreur", async () => {

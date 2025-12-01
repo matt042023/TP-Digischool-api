@@ -2,7 +2,8 @@ const eleveService = require("../services/eleveService");
 
 exports.getAll = async (req, res) => {
   try {
-    const data = await eleveService.getAll();
+    const groupByClasse = req.query.groupByClasse === 'true';
+    const data = await eleveService.getAll(groupByClasse);
     res.json(data);
   } catch (e) {
     res.status(500).json({ message: e.message });

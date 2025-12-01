@@ -2,7 +2,8 @@ const professeurService = require("../services/professeurService");
 
 exports.getAll = async (req, res) => {
   try {
-    const data = await professeurService.getAll();
+    const { classe } = req.query;
+    const data = await professeurService.getAll(classe);
     res.json(data);
   } catch (e) {
     res.status(500).json({ message: e.message });

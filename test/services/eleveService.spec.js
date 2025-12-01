@@ -21,6 +21,32 @@ describe("EleveService", () => {
       expect(EleveRepository.findAll).toHaveBeenCalledTimes(1);
       expect(result).toEqual(mockEleves);
     });
+
+    it("devrait retourner les eleves groupés par classe", async () => {
+      const mockElevesGrouped = [
+        {
+          classeId: "classId1",
+          classeNom: "CP",
+          total: 2,
+          eleves: [
+            { _id: "1", nom: "Dupont", sexe: "M" },
+            { _id: "2", nom: "Martin", sexe: "F" },
+          ],
+        },
+        {
+          classeId: "classId2",
+          classeNom: "CE1",
+          total: 1,
+          eleves: [{ _id: "3", nom: "Durand", sexe: "M" }],
+        },
+      ];
+      EleveRepository.findAllGroupedByClasse.mockResolvedValue(mockElevesGrouped);
+
+      const result = await eleveService.getAll(true);
+
+      expect(EleveRepository.findAllGroupedByClasse).toHaveBeenCalledTimes(1);
+      expect(result).toEqual(mockElevesGrouped);
+    });
   });
 
   describe("getById", () => {

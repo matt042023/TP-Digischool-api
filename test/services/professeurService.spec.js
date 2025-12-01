@@ -1,7 +1,9 @@
 const professeurService = require("../../src/services/professeurService");
 const ProfesseurRepository = require("../../src/repositories/professeurRepository");
+const ClasseRepository = require("../../src/repositories/classeRepository");
 
 jest.mock("../../src/repositories/professeurRepository");
+jest.mock("../../src/repositories/classeRepository");
 
 describe("ProfesseurService", () => {
   beforeEach(() => {
@@ -20,6 +22,35 @@ describe("ProfesseurService", () => {
 
       expect(ProfesseurRepository.findAll).toHaveBeenCalledTimes(1);
       expect(result).toEqual(mockProfesseurs);
+    });
+
+    it("devrait retourner le professeur d'une classe spécifique", async () => {
+      const mockClasse = { _id: "classId1", nom: "CP", prof: "profId1" };
+      const mockProfesseur = { _id: "profId1", nom: "Leroy", sexe: "M" };
+      ClasseRepository.getById.mockResolvedValue(mockClasse);
+      ProfesseurRepository.findById.mockResolvedValue(mockProfesseur);
+
+      const result = await professeurService.getAll("classId1");
+
+      expect(ClasseRepository.getById).toHaveBeenCalledWith("classId1");
+      expect(ProfesseurRepository.findById).toHaveBeenCalledWith("profId1");
+      expect(result).toEqual([mockProfesseur]);
+    });
+
+    it("devrait retourner un tableau vide si le professeur n'existe pas", async () => {
+      const mockClasse = { _id: "classId1", nom: "CP", prof: "profId1" };
+      ClasseRepository.getById.mockResolvedValue(mockClasse);
+      ProfesseurRepository.findById.mockResolvedValue(null);
+
+      const result = await professeurService.getAll("classId1");
+
+      expect(result).toEqual([]);
+    });
+
+    it("devrait lever une erreur si la classe n'existe pas", async () => {
+      ClasseRepository.getById.mockResolvedValue(null);
+
+      await expect(professeurService.getAll("invalidId")).rejects.toThrow("Classe introuvable");
     });
   });
 
